@@ -8,6 +8,7 @@ public:
 	~CInput();
 	
 	bool IsKeyDown(SDLKey);
+	bool QuitStatus();
 	void HandleInput();
 
 private:

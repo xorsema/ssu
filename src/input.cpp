@@ -44,3 +44,8 @@ void CInput::HandleInput()
 		UpdateKeyStatus(event);
 	}
 }
+
+bool CInput::QuitStatus()
+{
+	return Quit;
+}
