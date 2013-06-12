@@ -18,6 +18,6 @@ private:
 	
 };
 
-extern CRenderer Renderer;
+extern CRenderer renderer;
 
 #endif

@@ -5,7 +5,7 @@
 
 #include "renderer.hpp"
 
-CRenderer Renderer;
+CRenderer renderer;
 
 CRenderer::CRenderer()
 {
