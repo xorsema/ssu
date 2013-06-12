@@ -1,7 +1,7 @@
 Super Stack Up
 ==============
 
-Super Stack Up is a game who's goal is to stack objects as high as possible, without them falling.
+Super Stack Up is a game whose goal is to stack objects as high as possible, without them falling.
 
 Goals
 -----
@@ -15,10 +15,12 @@ Build Details
 
 Super Stack Up (SSU) requires the following libraries in order to build:
 >SDL
->Freetype
+
+>freetype2
 
 On any Linux system with the proper libraries installed, SSU should build via the following steps
 >make clean
+
 >make
 
 You can then find the binary in the "bin" directory
