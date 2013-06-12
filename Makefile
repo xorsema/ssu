@@ -4,10 +4,10 @@ FT_CFLAGS = $(shell freetype-config --cflags)
 SDL_LDFLAGS = $(shell sdl-config --libs)
 FT_LDFLAGS = $(shell freetype-config --libs)
 CPPFLAGS = -g $(SDL_CFLAGS) $(FT_CFLAGS)
-LINK = -lGL -lGLU $(SDL_LDFLAGS) $(FT_LDFLAGS)
+LINK = -lGL -lGLU -lBox2D $(SDL_LDFLAGS) $(FT_LDFLAGS)
 VPATH = src/
 OUT = bin/
-SRCS = main.cpp renderer.cpp input.cpp entity.cpp
+SRCS = main.cpp renderer.cpp input.cpp entity.cpp physics.cpp timer.cpp
 
 include $(SRCS:.cpp=.d)
 

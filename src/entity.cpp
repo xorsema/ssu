@@ -1,6 +1,7 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <vector>
+#include <Box2D/Box2D.h>
 
 #include "types.hpp"
 #include "entity.hpp"
@@ -65,6 +66,19 @@ void CScene::Render()
 void CScene::Update()
 {
 	UpdateChildren();
+}
+
+//Set the offset, or where the "camera" is
+void CScene::Offset(float x, float y)
+{
+	pos.x = x;
+	pos.y = y;
+}
+
+//Set the zoom, or the scale for both the x and y axis
+void CScene::Zoom(float z)
+{
+	scale.x = scale.y = z;
 }
 
 //Render our polygon

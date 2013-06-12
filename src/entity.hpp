@@ -27,8 +27,8 @@ public:
 	virtual void Render();
 	virtual void Update();
 
-private:
-
+	void Offset(float, float);
+	void Zoom(float);
 };
 
 class CPolygon : public CEntity
@@ -43,8 +43,7 @@ protected:
 	void		*PolygonData;	//Pointer to the data needed to render the poly
 	unsigned int	 PolygonDataCount;	//Amount of data units (float, int, etc)
 	GLenum           PolygonDataType;	//Data type used to store polygon vertex data (GL_SHORT, GL_INT, GL_FLOAT, or GL_DOUBLE)
-	GLenum		 PolygonType;	//OpenGL polygon type, such as GL_QUADS
-	
+	GLenum		 PolygonType;	//OpenGL polygon type, such as GL_QUADS	
 };
 
 #endif

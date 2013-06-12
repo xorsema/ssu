@@ -5,12 +5,15 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
+#include <Box2D/Box2D.h>
+
 #include <vector>
 
 #include "types.hpp"
 #include "renderer.hpp"
 #include "input.hpp"
 #include "entity.hpp"
+#include "physics.hpp"
 
 CScene scene;
 
@@ -26,12 +29,14 @@ int main(int argc, char **argv)
 	for(;;)
 	{
 		//Take care of input
-		input.HandleInput();
-		
+		input.HandleInput();	
 
 		//Exit the loop if we receive an SDL_QUIT event
 		if(input.QuitStatus() == true)
 			break;
+
+		//Step the physics world
+		physics.StepWorld();
 
 		//Update our scene, this also will update its children
 		scene.Update();
