@@ -18,6 +18,8 @@ Super Stack Up (SSU) requires the following libraries in order to build:
 
 >freetype2
 
+>Box2D
+
 On any Linux system with the proper libraries installed, SSU should build via the following steps
 >make clean
 
