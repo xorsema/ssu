@@ -1,6 +1,7 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+//Base entity class
 class CEntity
 {
 public:
@@ -21,6 +22,7 @@ protected:
 	void UpdateChildren();
 };
 
+//CScene class handles other entities
 class CScene : public CEntity
 {
 public:
@@ -31,6 +33,7 @@ public:
 	void Zoom(float);
 };
 
+//Base polygonal entity class
 class CPolygon : public CEntity
 {
 public:
@@ -46,21 +49,37 @@ protected:
 	GLenum		 PolygonType;	//OpenGL polygon type, such as GL_QUADS	
 };
 
+//Polygonal entity class with a physical body
 class CPhysicsPolygon : public CPolygon
 {
 public:
 	void Update();
 
 protected:
-	b2Body *CreateBody(b2BodyDef*);
-
-	b2Body		*Body;	
+	b2Body	*CreateBody(b2BodyDef*);
+	b2Body	*Body;	
 };
 
+//Rectangular version of a physical polygon
 class CPhysRect : public CPhysicsPolygon
 {
 public:
 	CPhysRect(float, float, float, float);
+};
+
+//Rectangle that is physical and is meant to be stacked
+class CStackableRect : public CPhysRect
+{
+public:
+	CStackableRect(float, float);
+private:
+	void SetUpBody();
+};
+
+class CGroundRect : public CPhysRect
+{
+public:
+	CGroundRect();
 };
 
 #endif

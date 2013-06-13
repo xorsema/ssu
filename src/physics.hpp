@@ -1,7 +1,7 @@
 #ifndef PHYSICS_HPP
 #define PHYSICS_HPP
 
-#define PIXELSPERMETER 50
+#define PIXELSPERMETER 50.0f
 #define GRAVITY -10.0f
 
 class CPhysics

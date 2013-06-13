@@ -25,7 +25,8 @@ int main(int argc, char **argv)
 	if(renderer.Init(1024, 768) == false)
 		return 1;
 
-	scene.Children.push_back(new CPhysRect(10, 10, 1, 1));
+	scene.Children.push_back(new CGroundRect());
+
 
 	//Main game loop
 	for(;;)
@@ -36,6 +37,11 @@ int main(int argc, char **argv)
 		//Exit the loop if we receive an SDL_QUIT event
 		if(input.QuitStatus() == true)
 			break;
+
+		if(input.IsKeyDown(SDLK_s))
+		{
+			scene.Children.push_back(new CStackableRect(8, 11));
+		}
 
 		//Step the physics world
 		physics.StepWorld();

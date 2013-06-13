@@ -9,10 +9,10 @@
 
 float QuadData[] =
 	{
-		0, 0,
-		1, 0,
-		1, 1,
-		0, 1
+		-.5f, -.5f,
+		.5f, -.5f,
+		.5f, .5f,
+		-.5f, .5f
 	};
 
 
@@ -62,7 +62,7 @@ void CScene::Render()
 	glScalef(scale.x, scale.y, 0.0f);
 
 	//Rotate it
-	glRotatef(0.0f, 0.0f, 0.0f, rot);
+	glRotatef(rot, 0.0f, 0.0f, 0.0f);
 
 	//Switch to the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -108,7 +108,7 @@ void CPolygon::Render()
 	glScalef(scale.x, scale.y, 0.0f);
 
 	//Set the rotation (rotate about the poly's origin)
-	glRotatef(0.0f, 0.0f, 0.0f, rot);
+	glRotatef(rot, 0.0f, 0.0f, 1.0f);
 
 	//Enable the vertex coord array
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -147,10 +147,6 @@ b2Body *CPhysicsPolygon::CreateBody(b2BodyDef *bdef)
 
 CPhysRect::CPhysRect(float x, float y, float w, float h)
 {
-	b2BodyDef	bdef;
-	b2FixtureDef	fdef;
-	b2PolygonShape	shape;
-
 	PolygonData	 = QuadData;
 	PolygonDataCount = sizeof(QuadData);
 	PolygonDataType	 = GL_FLOAT;
@@ -159,6 +155,27 @@ CPhysRect::CPhysRect(float x, float y, float w, float h)
 	scale.y		 = physics.MetersToPixels(h);
 	pos.x		 = physics.MetersToPixels(x);
 	pos.y		 = physics.MetersToPixels(y);
+}
+
+CStackableRect::CStackableRect(float x, float y) :
+	CPhysRect(x, y, 1, 1)
+{
+	SetUpBody();
+}
+
+void CStackableRect::SetUpBody()
+{
+	b2BodyDef	bdef;
+	b2FixtureDef	fdef;
+	b2PolygonShape	shape;
+
+	float x, y;
+	float w, h;
+
+	x = physics.PixelsToMeters(pos.x);
+	y = physics.PixelsToMeters(pos.y);
+	w = physics.PixelsToMeters(scale.x);
+	h = physics.PixelsToMeters(scale.y);
 
 	bdef.type = b2_dynamicBody;
 	bdef.position.Set(x, y);
@@ -170,4 +187,26 @@ CPhysRect::CPhysRect(float x, float y, float w, float h)
 	fdef.friction = 0.3f;
 	
 	Body->CreateFixture(&fdef);
+}
+
+CGroundRect::CGroundRect() :
+	CPhysRect(10, 3, 20, 0.1)
+{
+	b2BodyDef	bdef;
+	b2PolygonShape	shape;
+
+	float x, y;
+	float w, h;
+
+	x = physics.PixelsToMeters(pos.x);
+	y = physics.PixelsToMeters(pos.y);
+	w = physics.PixelsToMeters(scale.x);
+	h = physics.PixelsToMeters(scale.y);
+
+	bdef.type = b2_staticBody;
+	bdef.position.Set(x, y);
+	Body = CreateBody(&bdef);
+
+	shape.SetAsBox(w / 2.0, h / 2.0);
+	Body->CreateFixture(&shape, 0.0f);
 }
