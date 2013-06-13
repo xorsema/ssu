@@ -46,4 +46,21 @@ protected:
 	GLenum		 PolygonType;	//OpenGL polygon type, such as GL_QUADS	
 };
 
+class CPhysicsPolygon : public CPolygon
+{
+public:
+	void Update();
+
+protected:
+	b2Body *CreateBody(b2BodyDef*);
+
+	b2Body		*Body;	
+};
+
+class CPhysRect : public CPhysicsPolygon
+{
+public:
+	CPhysRect(float, float, float, float);
+};
+
 #endif

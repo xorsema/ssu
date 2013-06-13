@@ -25,6 +25,8 @@ int main(int argc, char **argv)
 	if(renderer.Init(1024, 768) == false)
 		return 1;
 
+	scene.Children.push_back(new CPhysRect(10, 10, 1, 1));
+
 	//Main game loop
 	for(;;)
 	{

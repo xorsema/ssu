@@ -10,6 +10,9 @@ public:
 	CPhysics();
 
 	void StepWorld();
+	b2PolygonShape *PolyShapeFromVerts(vec2f*, unsigned int);
+	float PixelsToMeters(float);
+	float MetersToPixels(float);
 
 	b2World world;
 
