@@ -17,6 +17,43 @@
 
 CScene scene;
 
+void do_controls()
+{
+	if(input.IsKeyDown(SDLK_s))
+	{
+		scene.Children.push_back(new CStackableRect(8, 11));
+	}
+	
+	if(input.IsKeyDown(SDLK_i))
+	{
+		scene.Zoom(.01f);
+	} 
+	if(input.IsKeyDown(SDLK_o))
+	{
+		scene.Zoom(-.01f);
+	}
+	
+	if(input.IsKeyDown(SDLK_LEFT))
+	{
+		scene.Offset(5.0f, 0.0f);
+	}
+	
+	if(input.IsKeyDown(SDLK_RIGHT))
+	{
+		scene.Offset(-5.0f, 0.0f);
+	}
+	
+	if(input.IsKeyDown(SDLK_UP))
+	{
+		scene.Offset(0.0f, -5.0f);
+	}
+	
+	if(input.IsKeyDown(SDLK_DOWN))
+	{
+		scene.Offset(0.0f, 5.0f);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -26,7 +63,6 @@ int main(int argc, char **argv)
 		return 1;
 
 	scene.Children.push_back(new CGroundRect());
-
 
 	//Main game loop
 	for(;;)
@@ -38,11 +74,13 @@ int main(int argc, char **argv)
 		if(input.QuitStatus() == true)
 			break;
 
-		if(input.IsKeyDown(SDLK_s))
+		if(input.IsKeyDown(SDLK_ESCAPE))
 		{
-			scene.Children.push_back(new CStackableRect(8, 11));
+			break;
 		}
 
+		do_controls();
+		
 		//Step the physics world
 		physics.StepWorld();
 

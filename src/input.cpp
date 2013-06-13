@@ -13,7 +13,7 @@ CInput::~CInput()
 }
 
 //Update our array of bools depending whether the key is down or not
-void CInput::UpdateKeyStatus(SDL_Event event)
+void CInput::UpdateKeyStatus(SDL_Event& event)
 {
 	if(event.type == SDL_KEYDOWN)
 	{
@@ -23,6 +23,11 @@ void CInput::UpdateKeyStatus(SDL_Event event)
 	{
 		KeyStatus[event.key.keysym.sym] = false;
 	}
+}
+
+void CInput::UpdateMouseStatus(SDL_Event& event)
+{
+
 }
 
 //Check the array for a key and return if it's being pressed or not

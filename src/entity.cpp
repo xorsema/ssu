@@ -1,11 +1,13 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <vector>
 #include <Box2D/Box2D.h>
 
 #include "types.hpp"
 #include "physics.hpp"
 #include "entity.hpp"
+#include "renderer.hpp"
 
 float QuadData[] =
 	{
@@ -78,17 +80,18 @@ void CScene::Update()
 	UpdateChildren();
 }
 
-//Set the offset, or where the "camera" is
+//Change the offset, or where the "camera" is
 void CScene::Offset(float x, float y)
 {
-	pos.x = x;
-	pos.y = y;
+	pos.x += x;
+	pos.y += y;
 }
 
 //Set the zoom, or the scale for both the x and y axis
 void CScene::Zoom(float z)
 {
-	scale.x = scale.y = z;
+	scale.x += z;
+	scale.y += z;
 }
 
 CPolygon::CPolygon()

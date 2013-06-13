@@ -12,8 +12,9 @@ public:
 	void HandleInput();
 
 private:
-	void UpdateKeyStatus(SDL_Event);	
-	
+	void UpdateKeyStatus(SDL_Event&);	
+	void UpdateMouseStatus(SDL_Event&);
+
 	bool KeyStatus[SDLK_LAST - SDLK_FIRST]; // true == pressed | false == released
 	bool Quit; //whether the quit event has been received
 };
