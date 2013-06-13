@@ -7,6 +7,7 @@
 #include <freetype/ftglyph.h>
 #include <Box2D/Box2D.h>
 
+#include <iostream>
 #include <vector>
 
 #include "types.hpp"
@@ -18,12 +19,7 @@
 CScene scene;
 
 void do_controls()
-{
-	if(input.IsKeyDown(SDLK_s))
-	{
-		scene.Children.push_back(new CStackableRect(8, 11));
-	}
-	
+{	
 	if(input.IsKeyDown(SDLK_i))
 	{
 		scene.Zoom(.01f);
@@ -52,6 +48,8 @@ void do_controls()
 	{
 		scene.Offset(0.0f, 5.0f);
 	}
+
+	
 }
 
 int main(int argc, char **argv)
@@ -80,6 +78,7 @@ int main(int argc, char **argv)
 		}
 
 		do_controls();
+
 		
 		//Step the physics world
 		physics.StepWorld();
@@ -89,9 +88,21 @@ int main(int argc, char **argv)
 
 		//Set up our frame for entities to be rendered
 		renderer.BeginFrame();
-
+		
 		//Render the scene
 		scene.Render();
+
+		if(input.IsButtonDown(SDL_BUTTON_LEFT))
+		{
+			float x, y;
+			
+			scene.ScreenToWorld(input.GetMouseX(), renderer.GetHeight() - input.GetMouseY(), &x, &y);
+
+			x = physics.PixelsToMeters(x);
+			y = physics.PixelsToMeters(y);
+			
+			scene.Children.push_back(new CStackableRect(x, y));
+		}
 
 		//After we're finished drawing, end the frame, swapping the buffers
 		renderer.EndFrame();

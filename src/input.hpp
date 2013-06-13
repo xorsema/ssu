@@ -5,7 +5,6 @@ class CInput
 {
 public:
 	CInput();
-	~CInput();
 	
 	bool IsKeyDown(SDLKey);
 	bool IsButtonDown(int);

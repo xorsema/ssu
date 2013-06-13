@@ -31,6 +31,10 @@ public:
 
 	void Offset(float, float);
 	void Zoom(float);
+	void ScreenToWorld(float, float, float*, float*);
+private:
+	GLdouble	pm[16]; //projection matrix
+	GLdouble	mvm[16];//modelview matrix
 };
 
 //Base polygonal entity class

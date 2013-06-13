@@ -9,10 +9,6 @@ CInput::CInput()
 {
 }
 
-CInput::~CInput()
-{
-}
-
 //Update our array of bools depending whether the key is down or not
 void CInput::UpdateKeyStatus(SDL_Event& event)
 {

@@ -2,6 +2,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <vector>
+#include <iostream>
 #include <Box2D/Box2D.h>
 
 #include "types.hpp"
@@ -61,16 +62,22 @@ void CScene::Render()
 	glTranslatef(pos.x, pos.y, 0.0f);
 	
 	//Scale it, effectively zooming
-	glScalef(scale.x, scale.y, 0.0f);
+	glScalef(scale.x, scale.y, 1.0f);
 
 	//Rotate it
 	glRotatef(rot, 0.0f, 0.0f, 0.0f);
+
+	//Save the projection matrix for gluUnProject
+	glGetDoublev(GL_PROJECTION_MATRIX, pm);
 
 	//Switch to the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 
 	//Reset its position
 	glLoadIdentity();
+
+	//Save the modelview matrix for gluUnProject
+	glGetDoublev(GL_MODELVIEW_MATRIX, mvm);
 
 	RenderChildren();
 }
@@ -92,6 +99,20 @@ void CScene::Zoom(float z)
 {
 	scale.x += z;
 	scale.y += z;
+}
+
+//Use gluUnProject to get the world coordinates
+void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
+{
+	GLdouble	dox, doy, doz;
+	GLint		vp[4];	//viewport
+
+	glGetIntegerv(GL_VIEWPORT, vp);
+	
+	gluUnProject(inx, iny, 0.0f, mvm, pm, vp, &dox, &doy, &doz);
+
+	*outx = (float)dox;
+	*outy = (float)doy;
 }
 
 CPolygon::CPolygon()

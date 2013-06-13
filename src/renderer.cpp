@@ -88,21 +88,3 @@ float CRenderer::GetHeight()
 {
 	return (float) display->h;
 }
-
-//Use gluUnProject to get the world coordinates
-void CRenderer::ScreenToWorld(float inx, float iny, float *outx, float *outy)
-{
-	GLdouble	mvm[16];//modelview matrix
-	GLdouble	pm[16]; //projection matrix
-	GLint		vp[4];	//viewport
-	GLdouble	dox, doy, doz;
-
-	glGetDoublev(GL_MODELVIEW_MATRIX, mvm);
-	glGetDoublev(GL_PROJECTION_MATRIX, pm);
-	glGetIntegerv(GL_VIEWPORT, vp);
-	
-	gluUnProject(inx, iny, 0.0f, mvm, pm, vp, &dox, &doy, &doz);
-
-	*outx = (float)dox;
-	*outy = (float)doy;
-}

@@ -15,7 +15,6 @@ public:
 
 	float GetWidth();
 	float GetHeight();
-	void ScreenToWorld(float, float, float*, float*);
 
 private:
 	SDL_Surface* display;
