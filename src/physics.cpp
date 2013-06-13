@@ -7,7 +7,7 @@
 CPhysics physics;
 
 CPhysics::CPhysics() :
-	gravity(0.0f, GRAVITY), world(gravity)
+	world(b2Vec2(0.0f, GRAVITY))
 {
 }
 

@@ -15,9 +15,6 @@ public:
 	float MetersToPixels(float);
 
 	b2World world;
-
-private:
-	b2Vec2 gravity;
 };
 
 extern CPhysics physics;
