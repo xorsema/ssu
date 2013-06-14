@@ -135,10 +135,15 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 CPhysScene::CPhysScene() :
 	world(b2Vec2(0.0f, -10.0f))
 {
-	pixelsPerMeter = 50.0f;
+	pixelsPerMeter = 25.0f * (renderer.GetWidth() / renderer.GetHeight());
 }
 
 void CPhysScene::Update()
+{
+	StepWorld();
+}
+
+void CPhysScene::StepWorld()
 {
 	world.Step(1.0f / 60.0f, 6, 2);
 }
@@ -204,6 +209,12 @@ void CPhysicsPolygon::Update()
 	rot = body->GetAngle() * (180/b2_pi);
 }
 
+CPhysRect::CPhysRect()
+{
+	scale.x = scale.y = 1;
+	pos.x = pos.y = 0;
+}
+
 //Specify x/y and w/h in pixels
 CPhysRect::CPhysRect(float x, float y, float w, float h)
 {
@@ -215,57 +226,4 @@ CPhysRect::CPhysRect(float x, float y, float w, float h)
 	scale.y		 = h;
 	pos.x		 = x;
 	pos.y		 = y;
-}
-
-CStackableRect::CStackableRect(float inx, float iny) :
-	CPhysRect(inx, iny, 1, 1)
-{
-	/*b2BodyDef	bdef;
-	b2FixtureDef	fdef;
-	b2PolygonShape	shape;
-
-	float x, y;
-	float w, h;
-
-	x = physics.PixelsToMeters(pos.x);
-	y = physics.PixelsToMeters(pos.y);
-	w = physics.PixelsToMeters(scale.x);
-	h = physics.PixelsToMeters(scale.y);
-
-	bdef.type = b2_dynamicBody;
-	bdef.position.Set(x, y);
-	body = CreateBody(&bdef);
-
-	shape.SetAsBox(w / 2.0, h / 2.0);
-	fdef.shape    = &shape;
-	fdef.density  = 1.0f;
-	fdef.friction = 0.3f;
-	
-	body->CreateFixture(&fdef);
-
-	type = TYPE_STACKABLE;*/
-}
-
-CGroundRect::CGroundRect() :
-	CPhysRect(10, 3, 20, 0.1)
-{
-	/*b2BodyDef	bdef;
-	b2PolygonShape	shape;
-
-	float x, y;
-	float w, h;
-
-	x = physics.PixelsToMeters(pos.x);
-	y = physics.PixelsToMeters(pos.y);
-	w = physics.PixelsToMeters(scale.x);
-	h = physics.PixelsToMeters(scale.y);
-
-	bdef.type = b2_staticBody;
-	bdef.position.Set(x, y);
-	body = CreateBody(&bdef);
-
-	shape.SetAsBox(w / 2.0, h / 2.0);
-	body->CreateFixture(&shape, 0.0f);
-
-	type = TYPE_GROUND;*/
 }

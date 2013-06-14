@@ -36,8 +36,9 @@
 #include "renderer.hpp"
 #include "input.hpp"
 #include "entity.hpp"
+#include "game.hpp"
 
-CPhysScene physScene;
+CGameScene *gameScene;
 
 int main(int argc, char **argv)
 {
@@ -46,6 +47,8 @@ int main(int argc, char **argv)
 
 	if(renderer.Init(1024, 768) == false)
 		return 1;
+
+	gameScene = new CGameScene;
 
 	//Main game loop
 	for(;;)
@@ -65,7 +68,7 @@ int main(int argc, char **argv)
 		//Set up our frame for entities to be rendered
 		renderer.BeginFrame();
 		
-		physScene.Frame();
+		gameScene->Frame();
 
 		//After we're finished drawing, end the frame, swapping the buffers
 		renderer.EndFrame();

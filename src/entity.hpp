@@ -77,6 +77,9 @@ public:
 	b2Body *CreateBody(b2BodyDef*);
 	float PixelsToMeters(float in) { return in / pixelsPerMeter; }
 	float MetersToPixels(float in) { return in * pixelsPerMeter; }
+	
+protected:
+	void StepWorld();
 
 private:
 	b2World world;
@@ -119,21 +122,8 @@ private:
 class CPhysRect : public CPhysicsPolygon
 {
 public:
+	CPhysRect();
 	CPhysRect(float, float, float, float);
-};
-
-//Rectangle that is physical and is meant to be stacked
-class CStackableRect : public CPhysRect
-{
-public:
-	CStackableRect(float, float);
-};
-
-//Rectangle used as the "ground"
-class CGroundRect : public CPhysRect
-{
-public:
-	CGroundRect();
 };
 
 #endif
