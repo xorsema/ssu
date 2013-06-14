@@ -80,14 +80,17 @@ void CEntity::UpdateChildren()
 //Set up the scene
 void CScene::Render()
 {
-	//Move the projection matrix
-	glTranslatef(pos.x, pos.y, 0.0f);
+	//Move the projection matrix to the correct location + half width/height so it will be changed from the center
+	glTranslatef(pos.x + (renderer.GetWidth() / 2.0), pos.y + (renderer.GetHeight() / 2.0), 0.0f);
 	
 	//Scale it, effectively zooming
 	glScalef(scale.x, scale.y, 1.0f);
 
 	//Rotate it
 	glRotatef(rot, 0.0f, 0.0f, 0.0f);
+
+	//Move it back to the "correct" position
+	glTranslatef(-renderer.GetWidth() / 2.0, -renderer.GetHeight() / 2.0, 0.0f);
 
 	//Save the projection matrix for gluUnProject
 	glGetDoublev(GL_PROJECTION_MATRIX, pm);
