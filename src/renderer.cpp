@@ -25,18 +25,16 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "timer.hpp"
 #include "renderer.hpp"
 
 CRenderer renderer;
 
-CRenderer::CRenderer()
+CRenderer::CRenderer() :
+	frameTimer(1000)
 {
-
-}
-
-CRenderer::~CRenderer()
-{
-
+	framesPerSecond = 0;
+	frameCount	= 0;
 }
 
 //Set the display size returning true if it's valid, otherwise false
@@ -88,6 +86,15 @@ void CRenderer::BeginFrame(void)
 void CRenderer::EndFrame(void)
 {
 	SDL_GL_SwapBuffers();
+
+	//If it's been a second, grab the amount of frames rendered and reset the counter, otherwise increment the counter
+	if(frameTimer.Elapsed())
+	{
+		framesPerSecond = frameCount;
+		frameCount	= 0;
+	}
+	else 
+		frameCount++;
 }
 
 //Init the renderer
@@ -97,6 +104,8 @@ bool CRenderer::Init(int w, int h)
 		return false;
 
 	GLInit();
+
+	frameTimer.Start();
 
 	return true;
 }
@@ -109,4 +118,9 @@ float CRenderer::GetWidth()
 float CRenderer::GetHeight()
 {
 	return (float) display->h;
+}
+
+int CRenderer::GetFps()
+{
+	return framesPerSecond;
 }

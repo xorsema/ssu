@@ -33,6 +33,7 @@
 #include <vector>
 
 #include "types.hpp"
+#include "timer.hpp"
 #include "renderer.hpp"
 #include "input.hpp"
 #include "entity.hpp"

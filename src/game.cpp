@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "types.hpp"
+#include "timer.hpp"
 #include "input.hpp"
 #include "entity.hpp"
 #include "game.hpp"
@@ -107,8 +108,8 @@ CGameScene::CGameScene()
 {
 	zoomSpeed = 0.01f;
 	
-	//Spawn the ground
-	ground = new CGroundRect(MetersToPixels(0), MetersToPixels(0), MetersToPixels(renderer.GetWidth()), MetersToPixels(GROUNDHEIGHT));
+	//Spawn the ground, with the width of the screen
+	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
 	AttachChild(ground);
 }
 

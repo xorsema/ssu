@@ -27,19 +27,22 @@ class CRenderer
 {
 public:
 	CRenderer();
-	~CRenderer();
-	
-	bool Init(int, int);
-	void GLInit(void);
-	bool SetDisplaySize(int, int);
-	void BeginFrame(void);
-	void EndFrame(void);
 
-	float GetWidth();
-	float GetHeight();
+	bool	Init(int, int);
+	void	GLInit(void);
+	bool	SetDisplaySize(int, int);
+	void	BeginFrame(void);
+	void	EndFrame(void);
+
+	float	GetWidth();
+	float	GetHeight();
+	int	GetFps();
 
 private:
-	SDL_Surface* display;
+	SDL_Surface*	display;
+	float		framesPerSecond;
+	int		frameCount;
+	CTimer		frameTimer;
 	
 };
 

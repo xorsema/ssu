@@ -28,6 +28,7 @@
 #include <Box2D/Box2D.h>
 
 #include "types.hpp"
+#include "timer.hpp"
 #include "entity.hpp"
 #include "renderer.hpp"
 
