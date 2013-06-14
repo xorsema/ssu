@@ -36,28 +36,29 @@ public:
 	CEntity();
 	~CEntity();
 
-	virtual void Render() = 0;
-	virtual void Update() = 0;
+	void	Frame();
+	void	AttachChild(CEntity*);
+	virtual void OnAttach(CEntity*) {}
 
-	int			type;
-	std::vector<CEntity*>	Children;
+	CEntity*		parent;
 
 protected:
 	vec2f	pos;		
 	vec2f	scale;		
 	float	rot;	
+	int	type;
 
-	void RenderChildren();
-	void UpdateChildren();
+private:
+	std::vector<CEntity*>	children;
+
+	virtual void Render() = 0;
+	virtual void Update() = 0;
 };
 
 //CScene class handles other entities and the "camera"
 class CScene : public CEntity
 {
 public:
-	virtual void Render();
-	virtual void Update();
-
 	void Offset(float, float);
 	void Zoom(float);
 	void ScreenToWorld(float, float, float*, float*);
@@ -65,31 +66,50 @@ public:
 private:
 	GLdouble	pm[16]; //projection matrix
 	GLdouble	mvm[16];//modelview matrix
+
+	virtual void Render();
+	virtual void Update() {}
+};
+
+//A scene with a Box2D world
+class CPhysScene : public CScene
+{
+public:
+	CGameScene();
+	b2Body *CreateBody(b2BodyDef*);
+
+private:
+	b2World world;
+	float pixelsPerMeter;
+
+	virtual void Update();
 };
 
 //Base polygonal entity class
 class CPolygon : public CEntity
 {
-public:
+protected:
+	void		*polygonData;	//Pointer to the data needed to render the poly
+	unsigned int	 polygonDataCount;	//Amount of data units (float, int, etc)
+	GLenum           polygonDataType;	//Data type used to store polygon vertex data (GL_SHORT, GL_INT, GL_FLOAT, or GL_DOUBLE)
+	GLenum		 polygonType;	//OpenGL polygon type, such as GL_QUADS	
+
+private:
 	virtual void Render();
 	virtual void Update() = 0;
-
-protected:
-	void		*PolygonData;	//Pointer to the data needed to render the poly
-	unsigned int	 PolygonDataCount;	//Amount of data units (float, int, etc)
-	GLenum           PolygonDataType;	//Data type used to store polygon vertex data (GL_SHORT, GL_INT, GL_FLOAT, or GL_DOUBLE)
-	GLenum		 PolygonType;	//OpenGL polygon type, such as GL_QUADS	
 };
 
 //Polygonal entity class with a physical body
 class CPhysicsPolygon : public CPolygon
 {
 public:
-	void Update();
+	CPhysicsPolygon();
 
 protected:
-	b2Body	*CreateBody(b2BodyDef*);
-	b2Body	*Body;	
+	b2Body	*body;	
+
+private:
+	void Update();
 };
 
 //Rectangular version of a physical polygon

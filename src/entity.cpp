@@ -39,7 +39,6 @@ float QuadData[] = {
 	-.5f, .5f
 };
 
-
 CEntity::CEntity()
 {
 	pos.x	= pos.y = 0.0f;
@@ -52,30 +51,30 @@ CEntity::CEntity()
 CEntity::~CEntity()
 {
 	//Loop through the children of the entity and free them
-	for(std::vector<CEntity*>::iterator it = Children.begin(); it != Children.end(); it++)
+	for(std::vector<CEntity*>::iterator it = children.begin(); it != Children.end(); it++)
 	{
 		delete *it;
 	}
 }
 
-//Render the entity's children and the children's children
-void CEntity::RenderChildren()
+//This should be called each from, subclasses will override the Update and Render functions to change behavior
+void CEntity::Frame()
 {
-	for(std::vector<CEntity*>::iterator it = Children.begin(); it != Children.end(); it++)
+	Update();
+	Render();
+	
+	for(std::vector<CEntity*>::iterator it = children.begin(); it != Children.end(); it++)
 	{
+		(*it)->Update();
 		(*it)->Render();
-		(*it)->RenderChildren();
 	}
 }
 
-//Do the same but update them
-void CEntity::UpdateChildren()
+//Attach a child, children will be updated and rendered along with the parent
+void CEntity::AttachChild(CEntity* e)
 {
-	for(std::vector<CEntity*>::iterator it = Children.begin(); it != Children.end(); it++)
-	{
-		(*it)->Update();
-		(*it)->UpdateChildren();
-	}
+	children.push_back(e);
+	e->OnAttach(this);
 }
 
 //Set up the scene
@@ -104,13 +103,6 @@ void CScene::Render()
 
 	//Save the modelview matrix for gluUnProject
 	glGetDoublev(GL_MODELVIEW_MATRIX, mvm);
-
-	RenderChildren();
-}
-
-void CScene::Update()
-{
-	UpdateChildren();
 }
 
 //Change the offset, or where the "camera" is
@@ -141,6 +133,21 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 	*outy = (float)doy;
 }
 
+CPhysScene::CGameScene() :
+	world(b2Vec2(0.0f, -10.0f))
+{
+}
+
+CPhysScene::Update()
+{
+	world.Step(1.0f / 60.0f, 6, 2);
+}
+
+b2Body *CPhysScene::CreateBody(b2BodyDef *bdef)
+{
+	return world.CreateBody(bdef);
+}
+
 //Render our polygon
 void CPolygon::Render()
 {
@@ -160,16 +167,21 @@ void CPolygon::Render()
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	//Specify our vertex data
-	glVertexPointer(2, PolygonDataType, 0, PolygonData);
+	glVertexPointer(2, polygonDataType, 0, polygonData);
 
 	//Draw our polygon
-	glDrawArrays(PolygonType, 0, PolygonDataCount / 2);
+	glDrawArrays(polygonType, 0, polygonDataCount / 2);
 
 	//Disable this because we're done
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	//Restore the saved matrix
 	glPopMatrix();
+}
+
+CPhysicsPolygon::CPhysicsPolygon()
+{
+	body = NULL;
 }
 
 //Use the body's coordinates to position our polygon
@@ -179,20 +191,15 @@ void CPhysicsPolygon::Update()
 	pos.y = physics.MetersToPixels(Body->GetPosition().y);
 
 	//We have to convert from radians to degrees
-	rot = Body->GetAngle() * (180/b2_pi);
-}
-
-b2Body *CPhysicsPolygon::CreateBody(b2BodyDef *bdef)
-{
-	return physics.world.CreateBody(bdef);
+	rot = body->GetAngle() * (180/b2_pi);
 }
 
 CPhysRect::CPhysRect(float x, float y, float w, float h)
 {
-	PolygonData	 = QuadData;
-	PolygonDataCount = sizeof(QuadData);
-	PolygonDataType	 = GL_FLOAT;
-	PolygonType	 = GL_QUADS;
+	polygonData	 = QuadData;
+	polygonDataCount = sizeof(QuadData);
+	polygonDataType	 = GL_FLOAT;
+	polygonType	 = GL_QUADS;
 	scale.x		 = physics.MetersToPixels(w);
 	scale.y		 = physics.MetersToPixels(h);
 	pos.x		 = physics.MetersToPixels(x);
@@ -216,14 +223,14 @@ CStackableRect::CStackableRect(float inx, float iny) :
 
 	bdef.type = b2_dynamicBody;
 	bdef.position.Set(x, y);
-	Body = CreateBody(&bdef);
+	body = CreateBody(&bdef);
 
 	shape.SetAsBox(w / 2.0, h / 2.0);
 	fdef.shape    = &shape;
 	fdef.density  = 1.0f;
 	fdef.friction = 0.3f;
 	
-	Body->CreateFixture(&fdef);
+	body->CreateFixture(&fdef);
 
 	type = TYPE_STACKABLE;
 }
@@ -244,10 +251,10 @@ CGroundRect::CGroundRect() :
 
 	bdef.type = b2_staticBody;
 	bdef.position.Set(x, y);
-	Body = CreateBody(&bdef);
+	body = CreateBody(&bdef);
 
 	shape.SetAsBox(w / 2.0, h / 2.0);
-	Body->CreateFixture(&shape, 0.0f);
+	body->CreateFixture(&shape, 0.0f);
 
 	type = TYPE_GROUND;
 }
