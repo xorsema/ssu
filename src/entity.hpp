@@ -75,7 +75,7 @@ private:
 class CPhysScene : public CScene
 {
 public:
-	CGameScene();
+	CPhysScene();
 	b2Body *CreateBody(b2BodyDef*);
 
 private:

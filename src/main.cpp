@@ -38,7 +38,7 @@
 #include "entity.hpp"
 #include "physics.hpp"
 
-CGameScene gameScene;
+CPhysScene physScene;
 
 int main(int argc, char **argv)
 {
@@ -62,8 +62,6 @@ int main(int argc, char **argv)
 		{
 			break;
 		}
-
-		do_controls();
 		
 		//Step the physics world
 		physics.StepWorld();
@@ -71,7 +69,7 @@ int main(int argc, char **argv)
 		//Set up our frame for entities to be rendered
 		renderer.BeginFrame();
 		
-		gameScene.Frame();
+		physScene.Frame();
 
 		//After we're finished drawing, end the frame, swapping the buffers
 		renderer.EndFrame();

@@ -51,7 +51,7 @@ CEntity::CEntity()
 CEntity::~CEntity()
 {
 	//Loop through the children of the entity and free them
-	for(std::vector<CEntity*>::iterator it = children.begin(); it != Children.end(); it++)
+	for(std::vector<CEntity*>::iterator it = children.begin(); it != children.end(); it++)
 	{
 		delete *it;
 	}
@@ -63,7 +63,7 @@ void CEntity::Frame()
 	Update();
 	Render();
 	
-	for(std::vector<CEntity*>::iterator it = children.begin(); it != Children.end(); it++)
+	for(std::vector<CEntity*>::iterator it = children.begin(); it != children.end(); it++)
 	{
 		(*it)->Update();
 		(*it)->Render();
@@ -133,12 +133,12 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 	*outy = (float)doy;
 }
 
-CPhysScene::CGameScene() :
+CPhysScene::CPhysScene() :
 	world(b2Vec2(0.0f, -10.0f))
 {
 }
 
-CPhysScene::Update()
+void CPhysScene::Update()
 {
 	world.Step(1.0f / 60.0f, 6, 2);
 }
@@ -187,8 +187,8 @@ CPhysicsPolygon::CPhysicsPolygon()
 //Use the body's coordinates to position our polygon
 void CPhysicsPolygon::Update()
 {
-	pos.x = physics.MetersToPixels(Body->GetPosition().x);
-	pos.y = physics.MetersToPixels(Body->GetPosition().y);
+	pos.x = physics.MetersToPixels(body->GetPosition().x);
+	pos.y = physics.MetersToPixels(body->GetPosition().y);
 
 	//We have to convert from radians to degrees
 	rot = body->GetAngle() * (180/b2_pi);
@@ -209,7 +209,7 @@ CPhysRect::CPhysRect(float x, float y, float w, float h)
 CStackableRect::CStackableRect(float inx, float iny) :
 	CPhysRect(inx, iny, 1, 1)
 {
-	b2BodyDef	bdef;
+	/*b2BodyDef	bdef;
 	b2FixtureDef	fdef;
 	b2PolygonShape	shape;
 
@@ -232,13 +232,13 @@ CStackableRect::CStackableRect(float inx, float iny) :
 	
 	body->CreateFixture(&fdef);
 
-	type = TYPE_STACKABLE;
+	type = TYPE_STACKABLE;*/
 }
 
 CGroundRect::CGroundRect() :
 	CPhysRect(10, 3, 20, 0.1)
 {
-	b2BodyDef	bdef;
+	/*b2BodyDef	bdef;
 	b2PolygonShape	shape;
 
 	float x, y;
@@ -256,5 +256,5 @@ CGroundRect::CGroundRect() :
 	shape.SetAsBox(w / 2.0, h / 2.0);
 	body->CreateFixture(&shape, 0.0f);
 
-	type = TYPE_GROUND;
+	type = TYPE_GROUND;*/
 }
