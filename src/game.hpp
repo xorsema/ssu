@@ -24,18 +24,7 @@
 #define GAME_HPP
 
 #define STACKABLERECTSIZE 1.0f
-
-//The scene for the main game
-class CGameScene : public CPhysScene
-{
-public:
-	CGameScene();
-
-private:
-	virtual void Update();
-
-	float zoomSpeed;
-};
+#define GROUNDHEIGHT 1.0f
 
 //Rectangle that is physical and is meant to be stacked
 class CStackableRect : public CPhysRect
@@ -53,9 +42,25 @@ class CGroundRect : public CPhysRect
 {
 public:
 	CGroundRect();
+	CGroundRect(float, float, float, float);
 
 private:
 	void CreateBody();
+};
+
+//The scene for the main game
+class CGameScene : public CPhysScene
+{
+public:
+	CGameScene();
+
+private:
+	virtual void	Update();
+	virtual void	DoControls();
+	void		SpawnStackableRect(float, float);
+
+	float		 zoomSpeed;
+	CGroundRect	*ground;
 };
 
 #endif

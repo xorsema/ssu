@@ -32,16 +32,23 @@
 #include "input.hpp"
 #include "entity.hpp"
 #include "game.hpp"
+#include "renderer.hpp"
 
 CStackableRect::CStackableRect()
 {
-	type	= TYPE_STACKABLE;
+	type = TYPE_STACKABLE;
 }
 
 CStackableRect::CStackableRect(float x, float y, float w, float h) :
 	CPhysRect(x, y, w, h)
 {
 	type  = TYPE_STACKABLE;
+}
+
+CGroundRect::CGroundRect(float x, float y, float w, float h) :
+	CPhysRect(x, y, w, h)
+{
+	type  = TYPE_GROUND;
 }
 
 CGroundRect::CGroundRect()
@@ -98,12 +105,19 @@ void CGroundRect::CreateBody()
 
 CGameScene::CGameScene()
 {
-	zoomSpeed = 0.1f;
+	zoomSpeed = 0.01f;
 	
-	AttachChild(new CStackableRect(MetersToPixels(5), MetersToPixels(5), MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
+	//Spawn the ground
+	ground = new CGroundRect(MetersToPixels(0), MetersToPixels(0), MetersToPixels(renderer.GetWidth()), MetersToPixels(GROUNDHEIGHT));
+	AttachChild(ground);
 }
 
-void CGameScene::Update()
+void CGameScene::SpawnStackableRect(float x, float y)
+{
+	AttachChild(new CStackableRect(MetersToPixels(x), MetersToPixels(y), MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
+}
+
+void CGameScene::DoControls()
 {
 	//Zoom in when pressing i
 	if(input.IsKeyDown(SDLK_i))
@@ -116,6 +130,12 @@ void CGameScene::Update()
 	{
 		Zoom(-zoomSpeed);
 	}
+}
+
+void CGameScene::Update()
+{
+	//Handle controls (clicking/dragging + keyboard)
+	DoControls();
 
 	//Step the world
 	StepWorld();
