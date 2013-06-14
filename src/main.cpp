@@ -36,7 +36,6 @@
 #include "renderer.hpp"
 #include "input.hpp"
 #include "entity.hpp"
-#include "physics.hpp"
 
 CPhysScene physScene;
 
@@ -63,9 +62,6 @@ int main(int argc, char **argv)
 			break;
 		}
 		
-		//Step the physics world
-		physics.StepWorld();
-
 		//Set up our frame for entities to be rendered
 		renderer.BeginFrame();
 		

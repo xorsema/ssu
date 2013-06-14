@@ -38,9 +38,7 @@ public:
 
 	void	Frame();
 	void	AttachChild(CEntity*);
-	virtual void OnAttach(CEntity*) {}
-
-	CEntity*		parent;
+	virtual void OnAttach(CEntity*) {} //Called when the entity is attached to a parent
 
 protected:
 	vec2f	pos;		
@@ -51,7 +49,7 @@ protected:
 private:
 	std::vector<CEntity*>	children;
 
-	virtual void Render() = 0;
+	virtual void Render() = 0;//These two functions will be called in Frame()
 	virtual void Update() = 0;
 };
 
@@ -77,10 +75,12 @@ class CPhysScene : public CScene
 public:
 	CPhysScene();
 	b2Body *CreateBody(b2BodyDef*);
+	float PixelsToMeters(float in) { return in / pixelsPerMeter; }
+	float MetersToPixels(float in) { return in * pixelsPerMeter; }
 
 private:
 	b2World world;
-	float pixelsPerMeter;
+	float	pixelsPerMeter;
 
 	virtual void Update();
 };
@@ -99,17 +99,20 @@ private:
 	virtual void Update() = 0;
 };
 
-//Polygonal entity class with a physical body
+//Polygonal entity class with a physical body, must be used with CPhysScene or a subclass
 class CPhysicsPolygon : public CPolygon
 {
 public:
 	CPhysicsPolygon();
+	void OnAttach(CEntity*);
 
 protected:
-	b2Body	*body;	
+	b2Body		*body;	//Box2D body of the poly
+	CPhysScene	*parent;//The parent scene, which holds the world
 
 private:
 	void Update();
+	virtual void CreateBody() {} //called after the polygon is attached, if body == NULL
 };
 
 //Rectangular version of a physical polygon

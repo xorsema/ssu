@@ -28,7 +28,6 @@
 #include <Box2D/Box2D.h>
 
 #include "types.hpp"
-#include "physics.hpp"
 #include "entity.hpp"
 #include "renderer.hpp"
 
@@ -136,6 +135,7 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 CPhysScene::CPhysScene() :
 	world(b2Vec2(0.0f, -10.0f))
 {
+	pixelsPerMeter = 50.0f;
 }
 
 void CPhysScene::Update()
@@ -184,26 +184,37 @@ CPhysicsPolygon::CPhysicsPolygon()
 	body = NULL;
 }
 
+void CPhysicsPolygon::OnAttach(CEntity* e)
+{
+	parent = static_cast<CPhysScene*>(e);
+
+	if(body == NULL)
+	{
+		CreateBody();
+	}
+}
+
 //Use the body's coordinates to position our polygon
 void CPhysicsPolygon::Update()
 {
-	pos.x = physics.MetersToPixels(body->GetPosition().x);
-	pos.y = physics.MetersToPixels(body->GetPosition().y);
+	pos.x = parent->MetersToPixels(body->GetPosition().x);
+	pos.y = parent->MetersToPixels(body->GetPosition().y);
 
 	//We have to convert from radians to degrees
 	rot = body->GetAngle() * (180/b2_pi);
 }
 
+//Specify x/y and w/h in pixels
 CPhysRect::CPhysRect(float x, float y, float w, float h)
 {
 	polygonData	 = QuadData;
 	polygonDataCount = sizeof(QuadData);
 	polygonDataType	 = GL_FLOAT;
 	polygonType	 = GL_QUADS;
-	scale.x		 = physics.MetersToPixels(w);
-	scale.y		 = physics.MetersToPixels(h);
-	pos.x		 = physics.MetersToPixels(x);
-	pos.y		 = physics.MetersToPixels(y);
+	scale.x		 = w;
+	scale.y		 = h;
+	pos.x		 = x;
+	pos.y		 = y;
 }
 
 CStackableRect::CStackableRect(float inx, float iny) :
