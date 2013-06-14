@@ -42,8 +42,7 @@ private:
 	SDL_Surface*	display;
 	float		framesPerSecond;
 	int		frameCount;
-	CTimer		frameTimer;
-	
+	CTimer		frameTimer;	
 };
 
 extern CRenderer renderer;

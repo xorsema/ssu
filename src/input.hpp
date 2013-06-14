@@ -28,12 +28,12 @@ class CInput
 public:
 	CInput();
 	
-	bool IsKeyDown(SDLKey);
-	bool IsButtonDown(int);
-	float GetMouseX();
-	float GetMouseY();
-	bool QuitStatus();
-	void HandleInput();
+	bool	IsKeyDown(SDLKey);
+	bool	IsButtonDown(int);
+	float	GetMouseX();
+	float	GetMouseY();
+	bool	QuitStatus();
+	void	HandleInput();
 
 private:
 	void UpdateKeyStatus(SDL_Event&);	

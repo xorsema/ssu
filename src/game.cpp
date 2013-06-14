@@ -131,6 +131,16 @@ void CGameScene::DoControls()
 	{
 		Zoom(-zoomSpeed);
 	}
+
+	//Handle double click to spawn stackable
+	if(input.IsButtonDown(SDL_BUTTON_LEFT))
+	{
+		float x, y;
+		
+		ScreenToWorld(input.GetMouseX(), renderer.GetHeight() - input.GetMouseY(), &x, &y);
+		
+		SpawnStackableRect(PixelsToMeters(x), PixelsToMeters(y));
+	}
 }
 
 void CGameScene::Update()
