@@ -32,13 +32,12 @@
 #include "entity.hpp"
 #include "renderer.hpp"
 
-float QuadData[] =
-	{
-		-.5f, -.5f,
-		.5f, -.5f,
-		.5f, .5f,
-		-.5f, .5f
-	};
+float QuadData[] = {
+	-.5f, -.5f,
+	.5f, -.5f,
+	.5f, .5f,
+	-.5f, .5f
+};
 
 
 CEntity::CEntity()
@@ -46,6 +45,8 @@ CEntity::CEntity()
 	pos.x	= pos.y = 0.0f;
 	scale.x = scale.y = 1.0f;
 	rot	= 0.0f;
+
+	type = TYPE_DEFAULT;
 }
 
 CEntity::~CEntity()
@@ -140,10 +141,6 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 	*outy = (float)doy;
 }
 
-CPolygon::CPolygon()
-{
-}
-
 //Render our polygon
 void CPolygon::Render()
 {
@@ -175,10 +172,6 @@ void CPolygon::Render()
 	glPopMatrix();
 }
 
-void CPolygon::Update()
-{
-}
-
 //Use the body's coordinates to position our polygon
 void CPhysicsPolygon::Update()
 {
@@ -206,13 +199,8 @@ CPhysRect::CPhysRect(float x, float y, float w, float h)
 	pos.y		 = physics.MetersToPixels(y);
 }
 
-CStackableRect::CStackableRect(float x, float y) :
-	CPhysRect(x, y, 1, 1)
-{
-	SetUpBody();
-}
-
-void CStackableRect::SetUpBody()
+CStackableRect::CStackableRect(float inx, float iny) :
+	CPhysRect(inx, iny, 1, 1)
 {
 	b2BodyDef	bdef;
 	b2FixtureDef	fdef;
@@ -236,6 +224,8 @@ void CStackableRect::SetUpBody()
 	fdef.friction = 0.3f;
 	
 	Body->CreateFixture(&fdef);
+
+	type = TYPE_STACKABLE;
 }
 
 CGroundRect::CGroundRect() :
@@ -258,4 +248,6 @@ CGroundRect::CGroundRect() :
 
 	shape.SetAsBox(w / 2.0, h / 2.0);
 	Body->CreateFixture(&shape, 0.0f);
+
+	type = TYPE_GROUND;
 }

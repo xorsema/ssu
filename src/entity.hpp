@@ -23,6 +23,12 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+enum {
+	TYPE_DEFAULT,
+	TYPE_STACKABLE,
+	TYPE_GROUND
+};
+
 //Base entity class
 class CEntity
 {
@@ -33,7 +39,8 @@ public:
 	virtual void Render() = 0;
 	virtual void Update() = 0;
 
-	std::vector<CEntity*> Children;
+	int			type;
+	std::vector<CEntity*>	Children;
 
 protected:
 	vec2f	pos;		
@@ -44,7 +51,7 @@ protected:
 	void UpdateChildren();
 };
 
-//CScene class handles other entities
+//CScene class handles other entities and the "camera"
 class CScene : public CEntity
 {
 public:
@@ -54,6 +61,7 @@ public:
 	void Offset(float, float);
 	void Zoom(float);
 	void ScreenToWorld(float, float, float*, float*);
+
 private:
 	GLdouble	pm[16]; //projection matrix
 	GLdouble	mvm[16];//modelview matrix
@@ -63,10 +71,8 @@ private:
 class CPolygon : public CEntity
 {
 public:
-	CPolygon();
-
 	virtual void Render();
-	virtual void Update();
+	virtual void Update() = 0;
 
 protected:
 	void		*PolygonData;	//Pointer to the data needed to render the poly
@@ -98,10 +104,9 @@ class CStackableRect : public CPhysRect
 {
 public:
 	CStackableRect(float, float);
-private:
-	void SetUpBody();
 };
 
+//Rectangle used as the "ground"
 class CGroundRect : public CPhysRect
 {
 public:
