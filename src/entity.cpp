@@ -136,7 +136,7 @@ void CScene::ScreenToWorld(float inx, float iny, float *outx, float *outy)
 CPhysScene::CPhysScene() :
 	world(b2Vec2(0.0f, -10.0f))
 {
-	pixelsPerMeter = 25.0f * (renderer.GetWidth() / renderer.GetHeight());
+	pixelsPerMeter = 50.0f;
 }
 
 void CPhysScene::Update()
