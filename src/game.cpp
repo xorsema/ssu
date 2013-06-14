@@ -132,7 +132,6 @@ void CGameScene::DoControls()
 		Zoom(-zoomSpeed);
 	}
 
-	//Handle double click to spawn stackable
 	if(input.IsButtonDown(SDL_BUTTON_LEFT))
 	{
 		float x, y;
