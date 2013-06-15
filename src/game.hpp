@@ -77,6 +77,7 @@ private:
 	float		 zoomSpeed;
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;
+	b2Body		*mouseJointTarget;
 };
 
 #endif

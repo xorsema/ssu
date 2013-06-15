@@ -150,6 +150,7 @@ void CGameScene::MouseUp(float inx, float iny, unsigned char button)
 	
 	if(button == SDL_BUTTON_LEFT && mouseJoint != NULL)
 	{
+		mouseJointTarget->SetFixedRotation(false);
 		world.DestroyJoint(mouseJoint);
 		mouseJoint = NULL;
 	}
@@ -185,6 +186,8 @@ void CGameScene::MouseDown(float inx, float iny, unsigned char button)
 			md.maxForce = 1000.0f * body->GetMass();
 			mouseJoint = (b2MouseJoint*)world.CreateJoint(&md);
 			body->SetAwake(true);
+			body->SetFixedRotation(true);
+			mouseJointTarget = body;
 		}
 	}
 }
