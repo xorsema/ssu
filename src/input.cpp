@@ -30,12 +30,18 @@ CInput input;
 
 CInput::CInput()
 {
-	inputListener = NULL;
+	mouseListener	 = NULL;
+	keyboardListener = NULL;
 }
 
-void CInput::SetListener(CInputListener *il)
+void CInput::SetKeyboardListener(CKeyboardListener *kl)
 {
-	inputListener = il;
+	keyboardListener = kl;
+}
+
+void CInput::SetMouseListener(CMouseListener *ml)
+{
+	mouseListener = ml;
 }
 
 //Update our arrays of bools depending whether the status of the key(s)
@@ -61,6 +67,43 @@ void CInput::UpdateMouseStatus(SDL_Event& event)
 		mouseStatus[event.button.button] = event.button.state;
 		mousePos.x			 = event.button.x;
 		mousePos.y			 = event.button.y;
+	}
+}
+
+void CInput::UpdateListeners(SDL_Event& event)
+{
+	//Call mouse listener functions
+	if(mouseListener != NULL)
+	{
+		switch(event.type)
+		{
+		case SDL_MOUSEMOTION:
+			mouseListener->MouseMove(event.motion.x, event.motion.y);
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			mouseListener->MouseDown(event.button.x, event.button.y, event.button.button);
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			mouseListener->MouseUp(event.button.x, event.button.y, event.button.button);
+			break;
+		}
+	}
+
+	//Call keyboard listener functions
+	if(keyboardListener != NULL)
+	{
+		switch(event.type)
+		{
+		case SDL_KEYDOWN:
+			keyboardListener->KeyDown(event.key.keysym.sym);
+			break;
+
+		case SDL_KEYUP:
+			keyboardListener->KeyUp(event.key.keysym.sym);
+			break;
+		}
 	}
 }
 
@@ -95,11 +138,11 @@ void CInput::HandleInput()
 		if(event.type == SDL_QUIT)
 			quit = true;
 
+		//Call apropriate keyboard and mouse listener functions
+		UpdateListeners(event);
+
 		UpdateKeyStatus(event);
 		UpdateMouseStatus(event);
-
-		if(inputListener != NULL)
-			inputListener->HandleInput(event);		
 	}
 }
 

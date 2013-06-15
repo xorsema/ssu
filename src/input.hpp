@@ -23,11 +23,21 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-//Inheriting from this class will let you handle input events
-class CInputListener
+//Listens for certain mouse events
+class CMouseListener
 {
 public:
-	virtual void HandleInput(SDL_Event&) {}
+	virtual void MouseDown(float, float, unsigned char) {}
+	virtual void MouseUp(float, float, unsigned char) {}
+	virtual void MouseMove(float, float) {}
+};
+
+//Listens for certain keyboard events
+class CKeyboardListener
+{
+public:
+	virtual void KeyDown(SDLKey) {}
+	virtual void KeyUp(SDLKey) {}
 };
 
 //Input related functions
@@ -42,18 +52,21 @@ public:
 	float	GetMouseY();
 	bool	QuitStatus();
 	void	HandleInput();
-	void	SetListener(CInputListener*);
+	void	SetKeyboardListener(CKeyboardListener*);
+	void	SetMouseListener(CMouseListener*);
 
 private:
 	void UpdateKeyStatus(SDL_Event&);	
 	void UpdateMouseStatus(SDL_Event&);
+	void UpdateListeners(SDL_Event&);
 
-	unsigned char	 keyStatus[SDLK_LAST - SDLK_FIRST];	// SDL_PRESSED or SDL_RELEASED
-	unsigned char	 mouseStatus[SDL_BUTTON_X2 + 1];	//same as above
-	vec2f		 mousePos;	//The mouse's position this frame
-	vec2f		 mouseOffset;	//The relative movement of the mouse this frame, if any
-	bool		 quit;	//whether the quit event has been received
-	CInputListener	*inputListener;
+	unsigned char		 keyStatus[SDLK_LAST - SDLK_FIRST];	// SDL_PRESSED or SDL_RELEASED
+	unsigned char		 mouseStatus[SDL_BUTTON_X2 + 1];	//same as above
+	vec2f			 mousePos;	//The mouse's position this frame
+	vec2f			 mouseOffset;	//The relative movement of the mouse this frame, if any
+	bool			 quit;	//whether the quit event has been received
+	CKeyboardListener	*keyboardListener;
+	CMouseListener		*mouseListener;
 };
 
 extern CInput input;

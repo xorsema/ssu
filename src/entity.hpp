@@ -38,7 +38,8 @@ public:
 
 	void	Frame();
 	void	AttachChild(CEntity*);
-	virtual void OnAttach(CEntity*) {} //Called when the entity is attached to a parent
+	virtual void OnAttach(CEntity*) {}	//Called when the entity is attached to a parent
+	int	GetType() { return type; }
 
 protected:
 	vec2f	pos;		
@@ -80,9 +81,9 @@ public:
 	
 protected:
 	void StepWorld();
+	b2World world;
 
 private:
-	b2World world;
 	float	pixelsPerMeter;
 
 	virtual void Update();
@@ -108,6 +109,7 @@ class CPhysicsPolygon : public CPolygon
 public:
 	CPhysicsPolygon();
 	void OnAttach(CEntity*);
+	b2Body *GetBody() { return body; }
 
 protected:
 	b2Body		*body;	//Box2D body of the poly

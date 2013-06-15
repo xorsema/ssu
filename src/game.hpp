@@ -48,19 +48,35 @@ private:
 	void CreateBody();
 };
 
+//AABB query callback that determines if any stackables are at a point (if any)
+class CStackableQuery : public b2QueryCallback
+{
+public:
+	CStackableQuery(const b2Vec2&);
+
+	bool ReportFixture(b2Fixture*);
+
+	b2Fixture	*fixture;
+	b2Vec2		 point;
+};
+
 //The scene for the main game
-class CGameScene : public CPhysScene, public CInputListener
+class CGameScene : public CPhysScene, public CMouseListener
 {
 public:
 	CGameScene();
 
+	void MouseUp(float, float, unsigned char);
+	void MouseDown(float, float, unsigned char);
+	void MouseMove(float, float);
+
 private:
 	virtual void	Update();
 	void		SpawnStackableRect(float, float);
-	void		HandleInput(SDL_Event&);
 
 	float		 zoomSpeed;
 	CGroundRect	*ground;
+	b2MouseJoint	*mouseJoint;
 };
 
 #endif

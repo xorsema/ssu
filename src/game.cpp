@@ -108,8 +108,10 @@ CGameScene::CGameScene()
 {
 	zoomSpeed = 0.01f;
 
-	//Make sure this object gets passed input event data
-	input.SetListener(this);
+	//Make sure this object gets passed mouse input event data
+	input.SetMouseListener(this);
+	
+	mouseJoint = NULL;
 	
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
@@ -119,20 +121,74 @@ CGameScene::CGameScene()
 //x and y are in pixels
 void CGameScene::SpawnStackableRect(float x, float y)
 {
+	std::cout << "Spawning Stackable at X:" << PixelsToMeters(x) << " Y:" << PixelsToMeters(y) << std::endl;
 	AttachChild(new CStackableRect(x, y, MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
 }
 
-void CGameScene::HandleInput(SDL_Event& event)
+void CGameScene::MouseMove(float inx, float iny)
 {
-	if(event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT)
+	if(mouseJoint != NULL)
 	{
 		float x, y;
 		
-		ScreenToWorld(input.GetMouseX(), renderer.GetHeight() - input.GetMouseY(), &x, &y);
+		ScreenToWorld(inx, iny, &x, &y);
+
+		mouseJoint->SetTarget(b2Vec2(PixelsToMeters(x), PixelsToMeters(renderer.GetHeight() - y)));
+	}
+}
+
+void CGameScene::MouseUp(float inx, float iny, unsigned char button)
+{
+	if(button == SDL_BUTTON_RIGHT)
+	{
+		float x, y;
+	
+		ScreenToWorld(inx, renderer.GetHeight() - iny, &x, &y);
 		
 		SpawnStackableRect(x, y);
 	}
+	
+	if(button == SDL_BUTTON_LEFT && mouseJoint != NULL)
+	{
+		world.DestroyJoint(mouseJoint);
+		mouseJoint = NULL;
+	}
 }
+
+void CGameScene::MouseDown(float inx, float iny, unsigned char button)
+{
+	//Set up the mouse joint so we can drag stuff
+	if(button == SDL_BUTTON_LEFT && mouseJoint == NULL)
+	{
+		b2AABB aabb;
+		b2Vec2 m; //mouse
+		b2Vec2 hs;//half size of the mouse's aabb
+		float x, y;
+
+		ScreenToWorld(inx, iny, &x, &y);
+		
+		m = b2Vec2(PixelsToMeters(x), PixelsToMeters(renderer.GetHeight() - y));
+		hs.Set(0.001f, 0.001f);
+		aabb.upperBound = m + hs;
+		aabb.lowerBound = m - hs;
+
+		CStackableQuery query(m);
+		world.QueryAABB(&query, aabb);
+
+		if(query.fixture != NULL)
+		{
+			b2Body* body = query.fixture->GetBody();
+			b2MouseJointDef md;
+			md.bodyA = ground->GetBody();
+			md.bodyB = body;
+			md.target = m;
+			md.maxForce = 1000.0f * body->GetMass();
+			mouseJoint = (b2MouseJoint*)world.CreateJoint(&md);
+			body->SetAwake(true);
+		}
+	}
+}
+
 void CGameScene::Update()
 {
 	if(input.IsKeyDown(SDLK_i))
@@ -147,4 +203,29 @@ void CGameScene::Update()
 
 	//Step the world
 	StepWorld();
+}
+
+CStackableQuery::CStackableQuery(const b2Vec2& in)
+{
+	point	= in;
+	fixture = NULL;
+}
+
+bool CStackableQuery::ReportFixture(b2Fixture *f)
+{
+	b2Body	*body;
+	CEntity *entity;
+
+	body = f->GetBody();
+	entity = (CEntity*)body->GetUserData();
+
+	if(entity->GetType() == TYPE_STACKABLE && f->TestPoint(point))
+	{
+		//We found a stackable's fixture, set the fixture to the one we found and return false to quit
+		fixture = f;
+		return false;
+	}
+
+	//Keep checking
+	return true;
 }
