@@ -21,9 +21,13 @@ Super Stack Up (SSU) requires the following libraries in order to build:
 >Box2D
 
 On any Linux system with the proper libraries installed, SSU should build via the following steps
->make clean
 
 >make
 
 You can then find the binary in the "bin" directory
 If something does go wrong, take a look at the Makefile and edit it to your needs.
+
+Current Priorities
+------------------
+* Text rendering with freetype
+* Calculate highest point (Box2D AABB tests)
