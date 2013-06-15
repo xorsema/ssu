@@ -49,15 +49,15 @@ private:
 };
 
 //The scene for the main game
-class CGameScene : public CPhysScene
+class CGameScene : public CPhysScene, public CInputListener
 {
 public:
 	CGameScene();
 
 private:
 	virtual void	Update();
-	virtual void	DoControls();
 	void		SpawnStackableRect(float, float);
+	void		HandleInput(SDL_Event&);
 
 	float		 zoomSpeed;
 	CGroundRect	*ground;

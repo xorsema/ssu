@@ -23,27 +23,37 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-class CInput
+//Inheriting from this class will let you handle input events
+class CInputListener
 {
 public:
+	virtual void HandleInput(SDL_Event&) {}
+};
+
+//Input related functions
+class CInput
+{
+public:	
 	CInput();
-	
+
 	bool	IsKeyDown(SDLKey);
 	bool	IsButtonDown(int);
 	float	GetMouseX();
 	float	GetMouseY();
 	bool	QuitStatus();
 	void	HandleInput();
+	void	SetListener(CInputListener*);
 
 private:
 	void UpdateKeyStatus(SDL_Event&);	
 	void UpdateMouseStatus(SDL_Event&);
 
-	unsigned char	keyStatus[SDLK_LAST - SDLK_FIRST];	// true == pressed | false == released
-	unsigned char	mouseStatus[SDL_BUTTON_X2 + 1];
-	vec2f		mousePos;	//The mouse's position this frame
-	vec2f		mouseOffset;	//The relative movement of the mouse this frame, if any
-	bool		quit;	//whether the quit event has been received
+	unsigned char	 keyStatus[SDLK_LAST - SDLK_FIRST];	// SDL_PRESSED or SDL_RELEASED
+	unsigned char	 mouseStatus[SDL_BUTTON_X2 + 1];	//same as above
+	vec2f		 mousePos;	//The mouse's position this frame
+	vec2f		 mouseOffset;	//The relative movement of the mouse this frame, if any
+	bool		 quit;	//whether the quit event has been received
+	CInputListener	*inputListener;
 };
 
 extern CInput input;

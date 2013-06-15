@@ -49,8 +49,8 @@ protected:
 private:
 	std::vector<CEntity*>	children;
 
-	virtual void Render() = 0;//These two functions will be called in Frame()
-	virtual void Update() = 0;
+	virtual void Render() {} //These two functions will be called in Frame()
+	virtual void Update() {}
 };
 
 //CScene class handles other entities and the "camera"

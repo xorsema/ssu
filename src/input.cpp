@@ -21,6 +21,7 @@
    distribution.
  */
 #include <SDL/SDL.h>
+#include <cstring>
 
 #include "types.hpp"
 #include "input.hpp"
@@ -29,6 +30,12 @@ CInput input;
 
 CInput::CInput()
 {
+	inputListener = NULL;
+}
+
+void CInput::SetListener(CInputListener *il)
+{
+	inputListener = il;
 }
 
 //Update our arrays of bools depending whether the status of the key(s)
@@ -51,9 +58,9 @@ void CInput::UpdateMouseStatus(SDL_Event& event)
 	}
 	else if(event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
 	{
-		mouseStatus[event.button.button]	 = event.button.state;
-		mousePos.x				 = event.button.x;
-		mousePos.y				 = event.button.y;
+		mouseStatus[event.button.button] = event.button.state;
+		mousePos.x			 = event.button.x;
+		mousePos.y			 = event.button.y;
 	}
 }
 
@@ -90,6 +97,9 @@ void CInput::HandleInput()
 
 		UpdateKeyStatus(event);
 		UpdateMouseStatus(event);
+
+		if(inputListener != NULL)
+			inputListener->HandleInput(event);		
 	}
 }
 

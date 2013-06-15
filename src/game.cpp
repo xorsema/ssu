@@ -107,45 +107,43 @@ void CGroundRect::CreateBody()
 CGameScene::CGameScene()
 {
 	zoomSpeed = 0.01f;
+
+	//Make sure this object gets passed input event data
+	input.SetListener(this);
 	
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
 	AttachChild(ground);
 }
 
+//x and y are in pixels
 void CGameScene::SpawnStackableRect(float x, float y)
 {
-	AttachChild(new CStackableRect(MetersToPixels(x), MetersToPixels(y), MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
+	AttachChild(new CStackableRect(x, y, MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
 }
 
-void CGameScene::DoControls()
+void CGameScene::HandleInput(SDL_Event& event)
 {
-	//Zoom in when pressing i
-	if(input.IsKeyDown(SDLK_i))
-	{
-		Zoom(zoomSpeed);
-	}
-	
-	//Zoom out when pressing o
-	if(input.IsKeyDown(SDLK_o))
-	{
-		Zoom(-zoomSpeed);
-	}
-
-	if(input.IsButtonDown(SDL_BUTTON_LEFT))
+	if(event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT)
 	{
 		float x, y;
 		
 		ScreenToWorld(input.GetMouseX(), renderer.GetHeight() - input.GetMouseY(), &x, &y);
 		
-		SpawnStackableRect(PixelsToMeters(x), PixelsToMeters(y));
+		SpawnStackableRect(x, y);
 	}
 }
-
 void CGameScene::Update()
 {
-	//Handle controls (clicking/dragging + keyboard)
-	DoControls();
+	if(input.IsKeyDown(SDLK_i))
+	{
+		Zoom(zoomSpeed);
+	}
+
+	if(input.IsKeyDown(SDLK_o))
+	{
+		Zoom(-zoomSpeed);
+	}
 
 	//Step the world
 	StepWorld();

@@ -197,6 +197,7 @@ void CPhysicsPolygon::OnAttach(CEntity* e)
 	if(body == NULL)
 	{
 		CreateBody();
+		body->SetUserData(this);
 	}
 }
 
