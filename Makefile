@@ -1,13 +1,11 @@
 CC = g++
 SDL_CFLAGS = $(shell sdl-config --cflags)
-FT_CFLAGS = $(shell freetype-config --cflags)
 SDL_LDFLAGS = $(shell sdl-config --libs)
-FT_LDFLAGS = $(shell freetype-config --libs)
-CPPFLAGS = -g $(SDL_CFLAGS) $(FT_CFLAGS)
-LINK = -lGL -lGLU -lBox2D $(SDL_LDFLAGS) $(FT_LDFLAGS)
+CPPFLAGS = -g $(SDL_CFLAGS)
+LINK = -lGL -lGLU -lBox2D $(SDL_LDFLAGS) -lSDL_ttf
 VPATH = src/
 OUT = bin/
-SRCS = main.cpp renderer.cpp input.cpp entity.cpp game.cpp texture.cpp timer.cpp
+SRCS = main.cpp renderer.cpp input.cpp entity.cpp game.cpp texture.cpp text.cpp timer.cpp
 
 include $(SRCS:.cpp=.d)
 

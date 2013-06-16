@@ -16,7 +16,7 @@ Build Details
 Super Stack Up (SSU) requires the following libraries in order to build:
 >SDL
 
->freetype2
+>SDL_ttf
 
 >Box2D
 
