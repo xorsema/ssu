@@ -7,7 +7,7 @@ CPPFLAGS = -g $(SDL_CFLAGS) $(FT_CFLAGS)
 LINK = -lGL -lGLU -lBox2D $(SDL_LDFLAGS) $(FT_LDFLAGS)
 VPATH = src/
 OUT = bin/
-SRCS = main.cpp renderer.cpp input.cpp entity.cpp game.cpp timer.cpp
+SRCS = main.cpp renderer.cpp input.cpp entity.cpp game.cpp texture.cpp timer.cpp
 
 include $(SRCS:.cpp=.d)
 

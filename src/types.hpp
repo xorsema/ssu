@@ -33,14 +33,7 @@ struct vec2i
 	int x, y;
 };
 
-struct color3
-{
-	unsigned char r, g, b;
-};
-
-struct color4
-{
-	unsigned char r, g, b, a;
-};
+typedef unsigned char color3[3];
+typedef unsigned char color4[4];
 
 #endif
