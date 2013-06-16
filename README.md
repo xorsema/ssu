@@ -29,5 +29,5 @@ If something does go wrong, take a look at the Makefile and edit it to your need
 
 Current Priorities
 ------------------
-* Text rendering with freetype
+* Text rendering with SDL_ttf
 * Calculate highest point (Box2D AABB tests)
