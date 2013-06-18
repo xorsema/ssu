@@ -84,16 +84,24 @@ void CText::SetText(const char *text)
 	TextToTexture(text);
 }
 
+void CText::SetColor(unsigned char r, unsigned char g, unsigned char b)
+{
+	textColor[0] = r;
+	textColor[1] = g;
+	textColor[2] = b;
+}
+
+
 //Replaces the current texture (freeing it) with a new one
 void CText::TextToTexture(const char *text)
 {
 	SDL_Surface	*surface;
-	SDL_Color	 white = { 255, 255, 255 };	//We'll use glColorf() to change colors, instead of SDL_ttf
+	SDL_Color	color = { textColor[0], textColor[1], textColor[2] };
 	CTexture	*newTexture;
 
 	textString = std::string(text);//Save the string
 	
-	surface	   = TTF_RenderText_Blended(font->GetFont(), textString.c_str(), white);	//Render it to a surface
+	surface	   = TTF_RenderText_Blended(font->GetFont(), textString.c_str(), color);	//Render it to a surface
 	textWidth  = surface->w;//Get the width and height of the rendered string
 	textHeight = surface->h;
 

@@ -26,6 +26,7 @@ public:
 
 	void SetSize(unsigned int);
 	void SetText(const char*);
+	void SetColor(unsigned char, unsigned char, unsigned char);
 
 private:
 	void TextToTexture(const char *text);
