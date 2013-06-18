@@ -24,9 +24,7 @@
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
+#include <SDL/SDL_ttf.h>
 #include <Box2D/Box2D.h>
 
 #include <iostream>
@@ -36,7 +34,9 @@
 #include "timer.hpp"
 #include "renderer.hpp"
 #include "input.hpp"
+#include "texture.hpp"
 #include "entity.hpp"
+#include "text.hpp"
 #include "game.hpp"
 
 CGameScene *gameScene;
