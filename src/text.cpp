@@ -89,8 +89,9 @@ void CText::SetColor(unsigned char r, unsigned char g, unsigned char b)
 	textColor[0] = r;
 	textColor[1] = g;
 	textColor[2] = b;
-}
 
+	TextToTexture(textString.c_str());
+}
 
 //Replaces the current texture (freeing it) with a new one
 void CText::TextToTexture(const char *text)
