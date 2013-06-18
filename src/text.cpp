@@ -32,10 +32,76 @@ void CFont::Init()
 	}	
 }
 
-void CFont::OpenFont(const char *path, int size)
+//Open a font by creating a font object with SDL_ttf
+void CFont::OpenFont(const char *path, unsigned int size)
 {
 	if(!(font = TTF_OpenFont(path, size)))
 	{
 		std::cout << "TTF_OpenFont Error:" << TTF_GetError() << std::endl;	
 	}
+	else 
+	{
+		fontPath = std::string(path);
+	}
+}
+
+//Reopen the font in a different size
+void CFont::SetSize(unsigned int size)
+{
+	if(font == NULL)
+		return;//Just return if we haven't opened a font yet
+
+	TTF_CloseFont(font);
+	OpenFont(fontPath.c_str(), size);
+}
+
+CText::CText()
+{
+	polygonData	 = QuadData;
+	polygonDataCount = sizeof(QuadData);
+	polygonDataType	 = GL_FLOAT;
+	polygonType	 = GL_QUADS;
+	font		 = NULL;
+	texture		 = NULL;
+}
+
+void CText::SetSize(unsigned int size)
+{
+	if(size != textSize)
+	{
+		textSize = size;//Set the new size
+		font->SetSize(textSize);//Set it in the font
+		TextToTexture(textString.c_str());//Re-render it
+	}
+}
+
+//If the text is the same, do nothing, otherwise set the text to the new string
+void CText::SetText(const char *text)
+{
+	if(std::string(text) == textString)
+		return;
+
+	TextToTexture(text);
+}
+
+//Replaces the current texture (freeing it) with a new one
+void CText::TextToTexture(const char *text)
+{
+	SDL_Surface	*surface;
+	SDL_Color	 white = { 255, 255, 255 };	//We'll use glColorf() to change colors, instead of SDL_ttf
+	CTexture	*newTexture;
+
+	textString = std::string(text);//Save the string
+	
+	surface	   = TTF_RenderText_Blended(font->GetFont(), textString.c_str(), white);	//Render it to a surface
+	textWidth  = surface->w;//Get the width and height of the rendered string
+	textHeight = surface->h;
+
+	newTexture = new CTexture(surface);//Turn it into a texture object
+
+	if(texture != NULL)
+		delete texture;//Get rid of the old one if it exists
+
+	texture = newTexture;//Set the member to the new one
+	texture->Load();
 }

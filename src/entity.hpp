@@ -92,6 +92,9 @@ private:
 //Base polygonal entity class
 class CPolygon : public CEntity
 {
+public:
+	CPolygon();
+
 protected:
 	void		*polygonData;	//Pointer to the data needed to render the poly
 	unsigned int	 polygonDataCount;	//Amount of data units (float, int, etc)
@@ -127,5 +130,7 @@ public:
 	CPhysRect();
 	CPhysRect(float, float, float, float);
 };
+
+extern float QuadData[8];
 
 #endif

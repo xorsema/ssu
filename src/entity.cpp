@@ -32,7 +32,7 @@
 #include "entity.hpp"
 #include "renderer.hpp"
 
-float QuadData[] = {
+float QuadData[8] = {
 	-.5f, -.5f,
 	.5f, -.5f,
 	.5f, .5f,
@@ -152,6 +152,14 @@ void CPhysScene::StepWorld()
 b2Body *CPhysScene::CreateBody(b2BodyDef *bdef)
 {
 	return world.CreateBody(bdef);
+}
+
+CPolygon::CPolygon()
+{
+	polygonData	 = NULL;
+	polygonDataCount = 0;
+	polygonDataType	 = 0;
+	polygonType	 = 0;
 }
 
 //Render our polygon

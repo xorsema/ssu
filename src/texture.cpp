@@ -16,6 +16,11 @@ CTexture::CTexture()
 	glType		 = GL_UNSIGNED_BYTE;
 }
 
+CTexture::CTexture(SDL_Surface *surface)
+{
+	FromSurface(surface);
+}
+
 CTexture::~CTexture()
 {
 	if(pixels != NULL)

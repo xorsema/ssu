@@ -5,6 +5,7 @@ class CTexture
 {
 public:
 	CTexture();
+	CTexture(SDL_Surface*);
 	~CTexture();
 
 	void		FromSurface(SDL_Surface*);
