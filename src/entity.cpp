@@ -201,6 +201,8 @@ void CTexturedPolygon::RenderPolygon()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	glBindTexture(GL_TEXTURE_2D, texture->GetName());
+
 	glVertexPointer(2, polygonDataType, 0, polygonData);
 	glTexCoordPointer(2, texCoordDataType, 0, texCoordData);
 

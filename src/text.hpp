@@ -18,7 +18,7 @@ private:
 };
 
 //Actual text drawing class
-class CText : public CPolygon
+class CText : public CTexturedPolygon
 {
 public:
 	CText();
@@ -32,7 +32,6 @@ private:
 	void TextToTexture(const char *text);
 
 	CFont		*font;
-	CTexture	*texture;
 	std::string	 textString;
 	unsigned int	 textWidth;	//Width and height (in pixels)
 	unsigned int	 textHeight;
