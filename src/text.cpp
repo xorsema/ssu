@@ -12,6 +12,13 @@
 #include "entity.hpp"
 #include "text.hpp"
 
+float QuadTextureData[8] = {
+	0.0f, 0.0f,
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+	0.0f, 1.0f
+};
+
 CFont::CFont()
 {
 	font = NULL;
@@ -58,9 +65,11 @@ void CFont::SetSize(unsigned int size)
 CText::CText()
 {
 	polygonData	 = QuadData;
-	polygonDataCount = sizeof(QuadData);
+	polygonDataCount = sizeof(QuadData) / sizeof(float);
 	polygonDataType	 = GL_FLOAT;
 	polygonType	 = GL_QUADS;
+	texCoordData	 = QuadTextureData;
+       	texCoordDataType = GL_FLOAT;
 	font		 = NULL;
 	texture		 = NULL;
 }

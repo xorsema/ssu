@@ -248,7 +248,7 @@ CPhysRect::CPhysRect()
 CPhysRect::CPhysRect(float x, float y, float w, float h)
 {
 	polygonData	 = QuadData;
-	polygonDataCount = sizeof(QuadData);
+	polygonDataCount = sizeof(QuadData) / sizeof(float);
 	polygonDataType	 = GL_FLOAT;
 	polygonType	 = GL_QUADS;
 	scale.x		 = w;
