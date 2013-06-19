@@ -102,8 +102,20 @@ protected:
 	GLenum		 polygonType;	//OpenGL polygon type, such as GL_QUADS	
 
 private:
-	virtual void Render();
-	virtual void Update() = 0;
+	void Render();
+	virtual void RenderPolygon();
+	virtual void Update() {}
+};
+
+class CTexturedPolygon : public CPolygon
+{
+protected:
+	CTexture	*texture;
+	void		*texCoordData;
+	GLenum		 texCoordDataType;
+
+private:
+	virtual void RenderPolygon();
 };
 
 //Polygonal entity class with a physical body, must be used with CPhysScene or a subclass

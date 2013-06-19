@@ -31,6 +31,7 @@
 #include "types.hpp"
 #include "timer.hpp"
 #include "input.hpp"
+#include "texture.hpp"
 #include "entity.hpp"
 #include "game.hpp"
 #include "renderer.hpp"

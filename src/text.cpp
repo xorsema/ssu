@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "types.hpp"
-#include "entity.hpp"
 #include "texture.hpp"
+#include "entity.hpp"
 #include "text.hpp"
 
 CFont::CFont()
