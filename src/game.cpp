@@ -23,6 +23,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include <Box2D/Box2D.h>
 
 #include <iostream>
@@ -33,6 +34,7 @@
 #include "input.hpp"
 #include "texture.hpp"
 #include "entity.hpp"
+#include "text.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
 
@@ -111,12 +113,17 @@ CGameScene::CGameScene()
 
 	//Make sure this object gets passed mouse input event data
 	input.SetMouseListener(this);
-	
+
 	mouseJoint = NULL;
 	
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
 	AttachChild(ground);
+
+	font.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 30);
+	CText *t = new CText("Test", &font);
+	t->SetPosition(100.0f, 100.0f);
+	AttachChild(t);
 }
 
 //x and y are in pixels

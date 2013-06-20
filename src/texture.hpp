@@ -19,6 +19,8 @@ public:
 	unsigned int GetHeight() { return height; }
 	
 protected:
+	virtual void Init();
+
 	unsigned char	*pixels;
 	unsigned int	 bytesPerPixel;
 	unsigned int	 width, height;

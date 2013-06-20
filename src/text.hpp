@@ -27,9 +27,11 @@ public:
 	void SetSize(unsigned int);
 	void SetText(const char*);
 	void SetColor(unsigned char, unsigned char, unsigned char);
+	void SetPosition(float, float);
 
 private:
 	void TextToTexture(const char *text);
+	void Init();
 
 	CFont		*font;
 	std::string	 textString;

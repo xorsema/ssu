@@ -198,18 +198,22 @@ void CPolygon::Render()
 
 void CTexturedPolygon::RenderPolygon()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
 
 	glBindTexture(GL_TEXTURE_2D, texture->GetName());
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glVertexPointer(2, polygonDataType, 0, polygonData);
 	glTexCoordPointer(2, texCoordDataType, 0, texCoordData);
-
 	glDrawArrays(polygonType, 0, polygonDataCount/2);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 CPhysicsPolygon::CPhysicsPolygon()

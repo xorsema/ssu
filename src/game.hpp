@@ -78,6 +78,7 @@ private:
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;
 	b2Body		*mouseJointTarget;
+	CFont		 font;
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "types.hpp"
 #include "texture.hpp"
@@ -62,7 +63,7 @@ void CFont::SetSize(unsigned int size)
 	OpenFont(fontPath.c_str(), size);
 }
 
-CText::CText()
+void CText::Init()
 {
 	polygonData	 = QuadData;
 	polygonDataCount = sizeof(QuadData) / sizeof(float);
@@ -72,6 +73,19 @@ CText::CText()
        	texCoordDataType = GL_FLOAT;
 	font		 = NULL;
 	texture		 = NULL;
+	memset(textColor, 255, 3);
+}
+
+CText::CText()
+{
+	Init();
+}
+
+CText::CText(const char *text, CFont *f)
+{
+	Init();
+	font = f;
+	SetText(text);
 }
 
 void CText::SetSize(unsigned int size)
@@ -82,6 +96,12 @@ void CText::SetSize(unsigned int size)
 		font->SetSize(textSize);//Set it in the font
 		TextToTexture(textString.c_str());//Re-render it
 	}
+}
+
+void CText::SetPosition(float x, float y)
+{
+	pos.x = x;
+	pos.y = y;
 }
 
 //If the text is the same, do nothing, otherwise set the text to the new string
@@ -114,6 +134,8 @@ void CText::TextToTexture(const char *text)
 	surface	   = TTF_RenderText_Blended(font->GetFont(), textString.c_str(), color);	//Render it to a surface
 	textWidth  = surface->w;//Get the width and height of the rendered string
 	textHeight = surface->h;
+	scale.x	   = textWidth;
+	scale.y	   = textHeight;
 
 	newTexture = new CTexture(surface);//Turn it into a texture object
 

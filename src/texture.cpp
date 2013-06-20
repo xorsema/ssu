@@ -1,23 +1,19 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 
+#include <iostream>
+
 #include "types.hpp"
 #include "texture.hpp"
 
 CTexture::CTexture()
 {
-	pixels		 = NULL;
-	bytesPerPixel	 = 0;
-	width		 = 0;
-	height		 = 0;
-	name		 = 0;
-	glFormat	 = GL_RGB;
-	glInternalFormat = GL_RGB;
-	glType		 = GL_UNSIGNED_BYTE;
+	Init();
 }
 
 CTexture::CTexture(SDL_Surface *surface)
 {
+	Init();
 	FromSurface(surface);
 }
 
@@ -30,11 +26,29 @@ CTexture::~CTexture()
 		glDeleteTextures(1, &name);
 }
 
+void CTexture::Init()
+{
+	pixels		 = NULL;
+	bytesPerPixel	 = 0;
+	width		 = 0;
+	height		 = 0;
+	name		 = 0;
+	glFormat	 = GL_RGB;
+	glInternalFormat = GL_RGB;
+	glType		 = GL_UNSIGNED_BYTE;
+}
+
 //Upload the texture to the GPU and get a name
 void CTexture::Load()
 {
 	glGenTextures(1, &name);
 	glBindTexture(GL_TEXTURE_2D, name);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, width, height, 0, glFormat, glType, pixels);
 }
 
@@ -122,7 +136,7 @@ void CTexture::FromSurface(SDL_Surface *surface)
 		color4 *data;
 		data = new color4[width * height];
 
-		for(int i = 0; i < width * height; i++)
+		for(int i = width * height, j = 0; i != 0; i--, j++)
 		{
 			unsigned int pixel, temp;
 			unsigned int *p;
@@ -133,22 +147,22 @@ void CTexture::FromSurface(SDL_Surface *surface)
 			temp	   = pixel & fmt->Rmask;
 			temp	   = temp >> fmt->Rshift;
 			temp	   = temp << fmt->Rloss;
-			data[i][0] = (unsigned char)temp;//red
+			data[j][0] = (unsigned char)temp;//red
 
 			temp	   = pixel & fmt->Gmask;
 			temp	   = temp >> fmt->Gshift;
 			temp	   = temp << fmt->Gloss;
-			data[i][1] = (unsigned char)temp;//green
+			data[j][1] = (unsigned char)temp;//green
 
 			temp	   = pixel & fmt->Bmask;
 			temp	   = temp >> fmt->Bshift;
 			temp	   = temp << fmt->Bloss;
-			data[i][2] = (unsigned char)temp;//blue
+			data[j][2] = (unsigned char)temp;//blue
 
 			temp	   = pixel & fmt->Amask;
 			temp	   = temp >> fmt->Ashift;
 			temp	   = temp << fmt->Aloss;
-			data[i][3] = (unsigned char)temp;//alpha
+			data[j][3] = (unsigned char)temp;//alpha
 		}
 
 		bytesPerPixel	 = 4;
