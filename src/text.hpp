@@ -22,12 +22,15 @@ class CText : public CTexturedPolygon
 {
 public:
 	CText();
+	CText(CFont*);
 	CText(const char*, CFont*);
 
 	void SetSize(unsigned int);
 	void SetText(const char*);
 	void SetColor(unsigned char, unsigned char, unsigned char);
 	void SetPosition(float, float);
+	unsigned int GetWidth() { return textWidth; }
+	unsigned int GetHeight() { return textHeight; }
 
 private:
 	void TextToTexture(const char *text);

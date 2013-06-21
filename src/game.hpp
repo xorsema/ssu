@@ -60,6 +60,20 @@ public:
 	b2Vec2		 point;
 };
 
+class CHudScene : public CScene
+{
+public:
+	CHudScene();
+
+	bool showFps;
+
+private:
+	virtual void Update();
+	
+	CFont	 fpsFont;
+	CText	*fpsDisplay;
+};
+
 //The scene for the main game
 class CGameScene : public CPhysScene, public CMouseListener
 {
@@ -78,7 +92,6 @@ private:
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;
 	b2Body		*mouseJointTarget;
-	CFont		 font;
 };
 
 #endif

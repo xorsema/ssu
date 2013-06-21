@@ -62,13 +62,14 @@ CEntity::~CEntity()
 void CEntity::Frame()
 {
 	Update();
-	Render();
-	
+	Render();	
+
 	for(std::vector<CEntity*>::iterator it = children.begin(); it != children.end(); it++)
 	{
-		(*it)->Update();
-		(*it)->Render();
+		(*it)->Frame();
 	}
+
+	EndFrame();
 }
 
 //Attach a child, children will be updated and rendered along with the parent
@@ -81,6 +82,11 @@ void CEntity::AttachChild(CEntity* e)
 //Set up the scene
 void CScene::Render()
 {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, renderer.GetWidth(), 0, renderer.GetHeight());
+
 	//Move the projection matrix to the correct location + half width/height so it will be changed from the center
 	glTranslatef(pos.x + (renderer.GetWidth() / 2.0), pos.y + (renderer.GetHeight() / 2.0), 0.0f);
 	
@@ -95,15 +101,15 @@ void CScene::Render()
 
 	//Save the projection matrix for gluUnProject
 	glGetDoublev(GL_PROJECTION_MATRIX, pm);
-
-	//Switch to the modelview matrix
-	glMatrixMode(GL_MODELVIEW);
-
-	//Reset its position
-	glLoadIdentity();
-
-	//Save the modelview matrix for gluUnProject
+	
+	//Save the modelview matrix as well
 	glGetDoublev(GL_MODELVIEW_MATRIX, mvm);
+}
+
+void CScene::EndFrame()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 }
 
 //Change the offset, or where the "camera" is

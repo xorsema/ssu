@@ -27,6 +27,7 @@
 #include <Box2D/Box2D.h>
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #include "types.hpp"
@@ -115,15 +116,12 @@ CGameScene::CGameScene()
 	input.SetMouseListener(this);
 
 	mouseJoint = NULL;
+
+	AttachChild(new CHudScene);
 	
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
 	AttachChild(ground);
-
-	font.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 30);
-	CText *t = new CText("Test", &font);
-	t->SetPosition(100.0f, 100.0f);
-	AttachChild(t);
 }
 
 //x and y are in pixels
@@ -214,6 +212,22 @@ void CGameScene::Update()
 
 	//Step the world
 	StepWorld();
+}
+
+CHudScene::CHudScene()
+{
+	fpsFont.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 24);
+	fpsDisplay = new CText(&fpsFont);
+	AttachChild(fpsDisplay);
+}
+
+void CHudScene::Update()
+{
+	std::stringstream ss;
+	
+	ss << "FPS: " << renderer.GetFps();
+	fpsDisplay->SetText(ss.str().c_str());
+	fpsDisplay->SetPosition(fpsDisplay->GetWidth() / 2.0 , renderer.GetHeight() -  (fpsDisplay->GetHeight() / 2.0));
 }
 
 CStackableQuery::CStackableQuery(const b2Vec2& in)

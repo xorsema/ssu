@@ -81,6 +81,12 @@ CText::CText()
 	Init();
 }
 
+CText::CText(CFont *f)
+{
+	Init();
+	font = f;
+}
+
 CText::CText(const char *text, CFont *f)
 {
 	Init();

@@ -50,8 +50,9 @@ protected:
 private:
 	std::vector<CEntity*>	children;
 
-	virtual void Render() {} //These two functions will be called in Frame()
+	virtual void Render() {} //These functions will be called in Frame()
 	virtual void Update() {}
+	virtual void EndFrame() {} //Called after children are handled
 };
 
 //CScene class handles other entities and the "camera"
@@ -68,6 +69,7 @@ private:
 
 	virtual void Render();
 	virtual void Update() {}
+	virtual void EndFrame();
 };
 
 //A scene with a Box2D world
