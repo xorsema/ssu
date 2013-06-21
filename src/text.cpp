@@ -14,10 +14,10 @@
 #include "text.hpp"
 
 float QuadTextureData[8] = {
-	0.0f, 0.0f,
-	1.0f, 0.0f,
+	0.0f, 1.0f,
 	1.0f, 1.0f,
-	0.0f, 1.0f
+	1.0f, 0.0f,
+	0.0f, 0.0f
 };
 
 CFont::CFont()

@@ -136,7 +136,7 @@ void CTexture::FromSurface(SDL_Surface *surface)
 		color4 *data;
 		data = new color4[width * height];
 
-		for(int i = width * height, j = 0; i != 0; i--, j++)
+		for(int i = 0; i < width * height; i++)
 		{
 			unsigned int pixel, temp;
 			unsigned int *p;
@@ -147,22 +147,22 @@ void CTexture::FromSurface(SDL_Surface *surface)
 			temp	   = pixel & fmt->Rmask;
 			temp	   = temp >> fmt->Rshift;
 			temp	   = temp << fmt->Rloss;
-			data[j][0] = (unsigned char)temp;//red
+			data[i][0] = (unsigned char)temp;//red
 
 			temp	   = pixel & fmt->Gmask;
 			temp	   = temp >> fmt->Gshift;
 			temp	   = temp << fmt->Gloss;
-			data[j][1] = (unsigned char)temp;//green
+			data[i][1] = (unsigned char)temp;//green
 
 			temp	   = pixel & fmt->Bmask;
 			temp	   = temp >> fmt->Bshift;
 			temp	   = temp << fmt->Bloss;
-			data[j][2] = (unsigned char)temp;//blue
+			data[i][2] = (unsigned char)temp;//blue
 
 			temp	   = pixel & fmt->Amask;
 			temp	   = temp >> fmt->Ashift;
 			temp	   = temp << fmt->Aloss;
-			data[j][3] = (unsigned char)temp;//alpha
+			data[i][3] = (unsigned char)temp;//alpha
 		}
 
 		bytesPerPixel	 = 4;
@@ -175,4 +175,24 @@ void CTexture::FromSurface(SDL_Surface *surface)
 	pixels = result;//We're finished, so grab the result
 
 	SDL_UnlockSurface(surface);//Done messing with the surface's pointers
+
+	/*SDL_Surface *temp;
+	unsigned int size;
+
+	temp = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_SWSURFACE, surface->w, surface->h, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+	SDL_BlitSurface(surface, 0, temp, 0);
+	
+	size = surface->w * surface->h * surface->format->BytesPerPixel;
+
+	pixels = new unsigned char[size];
+	SDL_LockSurface(temp);
+	memcpy(pixels, temp->pixels, size);
+	SDL_UnlockSurface(temp);
+
+	glFormat	 = GL_RGBA;
+	glInternalFormat = GL_RGBA;
+	glType		 = GL_UNSIGNED_BYTE;
+	bytesPerPixel	 = temp->format->BytesPerPixel;
+	width		 = temp->w;
+	height		 = temp->h;*/
 }
