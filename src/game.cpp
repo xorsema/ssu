@@ -218,6 +218,7 @@ CHudScene::CHudScene()
 {
 	fpsFont.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 24);
 	fpsDisplay = new CText(&fpsFont);
+	fpsDisplay->SetColor(255, 255, 255);
 	AttachChild(fpsDisplay);
 }
 
