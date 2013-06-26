@@ -141,15 +141,15 @@ void CGameScene::MouseMove(float inx, float iny, float inrelx, float inrely)
 	{
 		float x, y;
 		
-		ScreenToWorld(inx, iny, &x, &y);
+		ScreenToWorld(inx, renderer.GetHeight() - iny, &x, &y);
 
-		mouseJoint->SetTarget(b2Vec2(PixelsToMeters(x), PixelsToMeters(renderer.GetHeight() - y)));
+		mouseJoint->SetTarget(b2Vec2(PixelsToMeters(x), PixelsToMeters(y)));
 	}
 
 	//We should move the screen 
 	if(dragPan == true)
 	{
-		Offset(inrelx, -inrely);
+	       	Offset(inrelx, -inrely);
 	}
 }
 
@@ -185,9 +185,9 @@ void CGameScene::MouseDown(float inx, float iny, unsigned char button)
 		b2Vec2 hs;//half size of the mouse's aabb
 		float x, y;
 
-		ScreenToWorld(inx, iny, &x, &y);
+		ScreenToWorld(inx, renderer.GetHeight() - iny, &x, &y);
 		
-		m = b2Vec2(PixelsToMeters(x), PixelsToMeters(renderer.GetHeight() - y));
+		m = b2Vec2(PixelsToMeters(x), PixelsToMeters( y));
 		hs.Set(0.001f, 0.001f);
 		aabb.upperBound = m + hs;
 		aabb.lowerBound = m - hs;
