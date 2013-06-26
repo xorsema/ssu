@@ -29,5 +29,7 @@ If something does go wrong, take a look at the Makefile and edit it to your need
 
 Current Priorities
 ------------------
-* Text rendering with SDL_ttf
+* Text rendering with SDL_ttf - DONE!
 * Calculate highest point (Box2D AABB tests)
+* Splash screen
+* Rework controls
