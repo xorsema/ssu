@@ -155,7 +155,7 @@ void CGameScene::MouseMove(float inx, float iny, float inrelx, float inrely)
 
 void CGameScene::MouseUp(float inx, float iny, unsigned char button)
 {
-	if(button == SDL_BUTTON_RIGHT)
+	if(button == SDL_BUTTON_MIDDLE)
 	{
 		float x, y;
 	
@@ -171,7 +171,7 @@ void CGameScene::MouseUp(float inx, float iny, unsigned char button)
 		mouseJoint = NULL;
 	}
 
-	if(button == SDL_BUTTON_MIDDLE)
+	if(button == SDL_BUTTON_RIGHT)
 		dragPan = false;
 }
 
@@ -211,7 +211,7 @@ void CGameScene::MouseDown(float inx, float iny, unsigned char button)
 	}
 
 
-	if(button == SDL_BUTTON_MIDDLE)
+	if(button == SDL_BUTTON_RIGHT)
 		dragPan = true;
 }
 
