@@ -88,6 +88,7 @@ private:
 	virtual void	Update();
 	void		SpawnStackableRect(float, float);
 
+	CLayer		*stackableLayer;
 	float		 zoomSpeed;
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;

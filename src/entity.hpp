@@ -36,23 +36,35 @@ public:
 	CEntity();
 	~CEntity();
 
-	void	Frame();
-	void	AttachChild(CEntity*);
+	void		Frame();
+	virtual void	AttachChild(CEntity*);
 	virtual void OnAttach(CEntity*) {}	//Called when the entity is attached to a parent
 	int	GetType() { return type; }
 
 protected:
-	vec2f	pos;		
-	vec2f	scale;		
-	float	rot;	
-	int	type;
-
-private:
+	vec2f			pos;		
+	vec2f			scale;		
+	float			rot;	
+	int			type;
 	std::vector<CEntity*>	children;
 
+private:
 	virtual void Render() {} //These functions will be called in Frame()
 	virtual void Update() {}
 	virtual void EndFrame() {} //Called after children are handled
+};
+
+
+//Basically a pass through to separate things
+class CLayer : public CEntity
+{
+public:
+	CLayer(CEntity*);
+
+	void AttachChild(CEntity*);
+	
+private:
+	CEntity *parent;
 };
 
 //CScene class handles other entities and the "camera"

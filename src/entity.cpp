@@ -79,6 +79,17 @@ void CEntity::AttachChild(CEntity* e)
 	e->OnAttach(this);
 }
 
+CLayer::CLayer(CEntity *e)
+{
+	parent = e;
+}
+
+void CLayer::AttachChild(CEntity *e)
+{
+	children.push_back(e);//store it in this object's children vector but...
+	e->OnAttach(parent);//pass it the parent for it's OnAttach()
+}
+
 //Set up the scene
 void CScene::Render()
 {

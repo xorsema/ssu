@@ -117,6 +117,9 @@ CGameScene::CGameScene()
 
 	mouseJoint = NULL;
 
+	stackableLayer = new CLayer(this);
+	
+	AttachChild(stackableLayer);
 	AttachChild(new CHudScene);
 	
 	//Spawn the ground, with the width of the screen
@@ -128,7 +131,7 @@ CGameScene::CGameScene()
 void CGameScene::SpawnStackableRect(float x, float y)
 {
 	std::cout << "Spawning Stackable at X:" << PixelsToMeters(x) << " Y:" << PixelsToMeters(y) << std::endl;
-	AttachChild(new CStackableRect(x, y, MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
+	stackableLayer->AttachChild(new CStackableRect(x, y, MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
 }
 
 void CGameScene::MouseMove(float inx, float iny)
@@ -218,7 +221,7 @@ CHudScene::CHudScene()
 {
 	fpsFont.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 24);
 	fpsDisplay = new CText(&fpsFont);
-	fpsDisplay->SetColor(255, 255, 255);
+	fpsDisplay->SetColor(0, 255, 255);
 	AttachChild(fpsDisplay);
 }
 
