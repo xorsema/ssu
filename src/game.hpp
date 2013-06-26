@@ -82,7 +82,7 @@ public:
 
 	void MouseUp(float, float, unsigned char);
 	void MouseDown(float, float, unsigned char);
-	void MouseMove(float, float);
+	void MouseMove(float, float, float, float);
 
 private:
 	virtual void	Update();
@@ -93,6 +93,7 @@ private:
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;
 	b2Body		*mouseJointTarget;
+	bool		 dragPan;
 };
 
 #endif

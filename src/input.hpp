@@ -29,7 +29,7 @@ class CMouseListener
 public:
 	virtual void MouseDown(float, float, unsigned char) {}
 	virtual void MouseUp(float, float, unsigned char) {}
-	virtual void MouseMove(float, float) {}
+	virtual void MouseMove(float, float, float, float) {}
 };
 
 //Listens for certain keyboard events

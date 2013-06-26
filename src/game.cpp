@@ -124,7 +124,7 @@ CGameScene::CGameScene()
 	
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
-	AttachChild(ground);
+	stackableLayer->AttachChild(ground);
 }
 
 //x and y are in pixels
@@ -134,8 +134,9 @@ void CGameScene::SpawnStackableRect(float x, float y)
 	stackableLayer->AttachChild(new CStackableRect(x, y, MetersToPixels(STACKABLERECTSIZE), MetersToPixels(STACKABLERECTSIZE)));
 }
 
-void CGameScene::MouseMove(float inx, float iny)
+void CGameScene::MouseMove(float inx, float iny, float inrelx, float inrely)
 {
+	//Move the mouse joint to the new mouse pos
 	if(mouseJoint != NULL)
 	{
 		float x, y;
@@ -143,6 +144,12 @@ void CGameScene::MouseMove(float inx, float iny)
 		ScreenToWorld(inx, iny, &x, &y);
 
 		mouseJoint->SetTarget(b2Vec2(PixelsToMeters(x), PixelsToMeters(renderer.GetHeight() - y)));
+	}
+
+	//We should move the screen 
+	if(dragPan == true)
+	{
+		Offset(inrelx, -inrely);
 	}
 }
 
@@ -163,6 +170,9 @@ void CGameScene::MouseUp(float inx, float iny, unsigned char button)
 		world.DestroyJoint(mouseJoint);
 		mouseJoint = NULL;
 	}
+
+	if(button == SDL_BUTTON_MIDDLE)
+		dragPan = false;
 }
 
 void CGameScene::MouseDown(float inx, float iny, unsigned char button)
@@ -199,6 +209,10 @@ void CGameScene::MouseDown(float inx, float iny, unsigned char button)
 			mouseJointTarget = body;
 		}
 	}
+
+
+	if(button == SDL_BUTTON_MIDDLE)
+		dragPan = true;
 }
 
 void CGameScene::Update()

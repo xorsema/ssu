@@ -78,7 +78,7 @@ void CInput::UpdateListeners(SDL_Event& event)
 		switch(event.type)
 		{
 		case SDL_MOUSEMOTION:
-			mouseListener->MouseMove(event.motion.x, event.motion.y);
+			mouseListener->MouseMove(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
