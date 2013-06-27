@@ -50,6 +50,11 @@ CStackableRect::CStackableRect(float x, float y, float w, float h) :
 	type  = TYPE_STACKABLE;
 }
 
+float CStackableRect::GetHighestY()
+{
+	return body->GetFixtureList()->GetAABB(0).upperBound.y;
+}
+
 CGroundRect::CGroundRect(float x, float y, float w, float h) :
 	CPhysRect(x, y, w, h)
 {
@@ -117,14 +122,16 @@ CGameScene::CGameScene()
 
 	mouseJoint = NULL;
 
-	stackableLayer = new CLayer(this);
+	stackableLayer = new CStackableLayer(this);
 	
 	AttachChild(stackableLayer);
-	AttachChild(new CHudScene);
-	
+
 	//Spawn the ground, with the width of the screen
 	ground = new CGroundRect(renderer.GetWidth()/2.0, MetersToPixels(0), renderer.GetWidth(), MetersToPixels(GROUNDHEIGHT));
-	stackableLayer->AttachChild(ground);
+	AttachChild(ground);
+
+	hudScene = new CHudScene;
+	AttachChild(hudScene);
 }
 
 //x and y are in pixels
@@ -217,6 +224,8 @@ void CGameScene::MouseDown(float inx, float iny, unsigned char button)
 
 void CGameScene::Update()
 {
+	std::stringstream ss;
+
 	if(input.IsKeyDown(SDLK_i))
 	{
 		Zoom(zoomSpeed);
@@ -227,6 +236,15 @@ void CGameScene::Update()
 		Zoom(-zoomSpeed);
 	}
 
+	//Don't bother with this if we're dragging something
+	if(mouseJoint == NULL)
+	{
+		ss << "Highest point: " << stackableLayer->GetHighestPoint();
+		hudScene->highestDisplay->SetText(ss.str().c_str());
+		hudScene->highestDisplay->SetPosition(renderer.GetWidth() - (hudScene->highestDisplay->GetWidth() / 2), renderer.GetHeight() - (hudScene->highestDisplay->GetHeight() / 2.0));
+	}
+	
+
 	//Step the world
 	StepWorld();
 }
@@ -234,9 +252,14 @@ void CGameScene::Update()
 CHudScene::CHudScene()
 {
 	fpsFont.OpenFont("/usr/share/fonts/corefonts/arial.ttf", 24);
+	
 	fpsDisplay = new CText(&fpsFont);
 	fpsDisplay->SetColor(0, 255, 255);
 	AttachChild(fpsDisplay);
+
+	highestDisplay = new CText(&fpsFont);
+	highestDisplay->SetColor(0, 255, 255);
+	AttachChild(highestDisplay);
 }
 
 void CHudScene::Update()
@@ -245,7 +268,7 @@ void CHudScene::Update()
 	
 	ss << "FPS: " << renderer.GetFps();
 	fpsDisplay->SetText(ss.str().c_str());
-	fpsDisplay->SetPosition(fpsDisplay->GetWidth() / 2.0 , renderer.GetHeight() -  (fpsDisplay->GetHeight() / 2.0));
+	fpsDisplay->SetPosition(fpsDisplay->GetWidth() / 2.0 , renderer.GetHeight() - (fpsDisplay->GetHeight() / 2.0));
 }
 
 CStackableQuery::CStackableQuery(const b2Vec2& in)
@@ -271,4 +294,23 @@ bool CStackableQuery::ReportFixture(b2Fixture *f)
 
 	//Keep checking
 	return true;
+}
+
+float CStackableLayer::GetHighestPoint()
+{
+	float		 result;
+	CStackableRect	*sr;
+
+	result = 0;
+
+	for(std::vector<CEntity*>::iterator it = children.begin(); it != children.end(); it++)
+	{
+		float t;
+
+		sr = static_cast<CStackableRect*>(*it);
+		if((t = sr->GetHighestY()) > result)
+			result = t;
+	}
+
+	return result;
 }

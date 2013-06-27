@@ -32,6 +32,8 @@ class CStackableRect : public CPhysRect
 public:
 	CStackableRect();
 	CStackableRect(float, float, float, float);
+	
+	float GetHighestY();
 
 private:
 	void CreateBody();
@@ -66,12 +68,20 @@ public:
 	CHudScene();
 
 	bool showFps;
+	CText *highestDisplay;
 
 private:
 	virtual void Update();
 	
 	CFont	 fpsFont;
 	CText	*fpsDisplay;
+};
+
+class CStackableLayer : public CLayer
+{
+public:
+	CStackableLayer(CEntity* e) : CLayer(e) {}
+	float GetHighestPoint();
 };
 
 //The scene for the main game
@@ -88,12 +98,14 @@ private:
 	virtual void	Update();
 	void		SpawnStackableRect(float, float);
 
-	CLayer		*stackableLayer;
+	CHudScene	*hudScene;
+	CStackableLayer	*stackableLayer;
 	float		 zoomSpeed;
 	CGroundRect	*ground;
 	b2MouseJoint	*mouseJoint;
 	b2Body		*mouseJointTarget;
 	bool		 dragPan;
+	float		 currentHighest;
 };
 
 #endif
