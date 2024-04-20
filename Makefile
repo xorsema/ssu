@@ -1,8 +1,8 @@
 CC = g++
-SDL_CFLAGS = $(shell sdl-config --cflags)
-SDL_LDFLAGS = $(shell sdl-config --libs)
-CPPFLAGS = -g $(SDL_CFLAGS)
-LINK = -lGL -lGLU -lBox2D $(SDL_LDFLAGS) -lSDL_ttf
+SDL_CFLAGS = $(shell sdl-config --cflags) $(shell pkg-config box2d --cflags)
+SDL_LDFLAGS = $(shell sdl-config --libs) $(shell pkg-config box2d --libs)
+CPPFLAGS = -g -std=c++11 $(SDL_CFLAGS)
+LINK = $(SDL_LDFLAGS) -lSDL_ttf -lGL -lGLU -lbox2d 
 VPATH = src/
 OUT = bin/
 SRCS = main.cpp renderer.cpp input.cpp entity.cpp game.cpp texture.cpp text.cpp timer.cpp
@@ -12,10 +12,10 @@ include $(SRCS:.cpp=.d)
 .DEFAULT_GOAL := ssu
 
 ssu: $(SRCS:.cpp=.o)
-	$(CC) $(CPPFLAGS) $(LINK) -o $(OUT)$@ $^ 
+	$(CC) $^ $(CPPFLAGS) $(LINK) -o $(OUT)$@  
 
 %.o : %.cpp
-	$(CC) $(CPPFLAGS) -c -o $@ $<
+	$(CC) $< $(CPPFLAGS) -c -o $@ 
 
 %.d: %.cpp
 	@set -e; rm -f $@; \

@@ -24,7 +24,7 @@
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 
 #include <iostream>
 #include <sstream>
@@ -283,7 +283,7 @@ bool CStackableQuery::ReportFixture(b2Fixture *f)
 	CEntity *entity;
 
 	body = f->GetBody();
-	entity = (CEntity*)body->GetUserData();
+	entity = (CEntity*)body->GetUserData().pointer;
 
 	if(entity->GetType() == TYPE_STACKABLE && f->TestPoint(point))
 	{

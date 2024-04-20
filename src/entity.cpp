@@ -25,7 +25,7 @@
 #include <GL/glu.h>
 #include <vector>
 #include <iostream>
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 
 #include "types.hpp"
 #include "timer.hpp"
@@ -245,7 +245,7 @@ void CPhysicsPolygon::OnAttach(CEntity* e)
 	if(body == NULL)
 	{
 		CreateBody();
-		body->SetUserData(this);
+		body->GetUserData().pointer =(uintptr_t) this;
 	}
 }
 
